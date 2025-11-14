@@ -10,7 +10,8 @@ int lire_entier_old(const char *prompt) {
 }
 
 int lire_entier(const char *prompt) {
-    char *temp_str = malloc(1024*sizeof(char)); // prompts will never exceed 1024
+    char *temp_str = malloc(1024*sizeof(char)); // prompts will never 
+                                                     // exceed 1024
     // sprintf(temp_str, "%s", prompt);
     char *n_str = lire_chaine_dynamique(prompt);
     free(temp_str);
@@ -27,7 +28,8 @@ double lire_reel2(const char *prompt) {
 }
 
 double lire_reel(const char *prompt) {
-    char *temp_str = malloc(1024*sizeof(char)); // prompts will never exceed 1024
+    char *temp_str = malloc(1024*sizeof(char)); // prompts will never 
+                                                     // exceed 1024
     sprintf(temp_str, "%s", prompt);
     char *x_str = lire_chaine_dynamique(temp_str);
     free(temp_str);
@@ -46,23 +48,23 @@ char lire_caractere(const char *prompt) {
     char c;
     printf("%s", prompt);
     scanf(" %c", &c);
-    // while ((c = getchar()) != '\n' && c != EOF) // flush buffer when first char consumed
-    //     ;
+    // while ((c = getchar()) != '\n' && c != EOF) // flush buffer when first 
+    //     ;                                       // char consumed
     return c;
 }
 
 char *lire_chaine_dynamique(const char *prompt) {
     int c;
-    // while ((c = getchar()) != '\n' && c != EOF) // flush buffer before reading
+    // while ((c = getchar()) != '\n' && c != EOF) //flush buffer before reading
     //     ;
     printf("%s", prompt);
     size_t capacity = 16, size = 0;
     char *str = malloc(capacity * sizeof(char));
     while ((c = getchar()) != '\n' && c != EOF) {
-        // the correct condition is size >= capacity -1 cuz if we look at its complement
-        // it is size < capacity - 1, which means don't resize as long as size didnt hit 
-        // capacity - 1 and the last byte we gonna write is capacity - 2, 
-        // and capacity - 1 will be left for the \0
+        // the correct condition is size >= capacity -1 cuz if we look at its 
+        // complement it is size < capacity - 1, which means don't resize as
+        // long as size didnt hit capacity - 1 and the last byte we gonna write
+        // is capacity - 2, and capacity - 1 will be left for the \0
         if (size >= capacity - 1) { 
             capacity *= 2;
             str = realloc(str, capacity);

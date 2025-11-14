@@ -1,24 +1,24 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+#include "structs.h"
+
+/* 
 typedef struct Client {
     int id;
     char *nom, *prenom, *telephone;
     double duree_location;
     double montant_location;
     double velo_loue_id;
-} Client;
-
-
-/*
-typedef struct Velo {
-    int id;
-    char *marque; // marque du velo
-    char *type; // (VTT, route, electrique ...)
-    double prix_par_heure; // tarif de location
-    int disponible; // 1 = disponible, 0 = loué
-    int loue_par_client_id; // -1 s'il n'est pas loué
-} Velo;
+} Client; 
 */
+
+
+int trouver_client_par_id(Base_Donnee_Location *bd, int id_client);
+int retourner_velo_par_client(Base_Donnee_Location *bd, int id_client,
+    double duree, double *montant);
+int doubler_taille_tab_client(Base_Donnee_Location *bd);
+int ajouter_nouveau_client(Base_Donnee_Location *bd, char *nom, char *prenom,
+    char *telephone);
 
 #endif

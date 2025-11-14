@@ -1,0 +1,10 @@
+#ifndef ERROR_CODES_H
+#define ERROR_CODES_H
+
+#define ERR_VELO_NOT_FOUND -1
+#define ERR_CLIENT_NOT_FOUND -2
+#define ERR_VELO_DEJA_LOUE -3
+#define ERR_CLIENT_LOUE_DEJA_1VELO -4
+#define ERR_CLIENT_NOT_RENTING -5
+
+#endif

@@ -16,7 +16,7 @@ void print_menu() {
     printf("\t| A. Gestion des vélos:                                    |\n");
     printf("\t|   a. Ajouter un nouveau vélo                             |\n");
     printf("\t|   b. Supprimer un vélo                                   |\n");
-    printf("\t|   c. Modifier les données d'un vélo                      |\n");
+    printf("\t|   c. Modifier le tarif d'un vélo                         |\n");
     printf("\t|   d. Louer un vélo                                       |\n");
     printf("\t|   e. Retourner un vélo                                   |\n");
     printf("\t| B. Gestion des clients:                                  |\n");

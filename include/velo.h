@@ -18,4 +18,9 @@ int ajouter_nouveau_velo(Base_Donnee_Location *bd, char *marque, char *type,
                           double prix_par_heure);
 int doubler_taille_tab_velo(Base_Donnee_Location *bd);
 void afficher_velo_par_id(Base_Donnee_Location *bd, int id);
+int supprimer_velo_par_id(Base_Donnee_Location *bd, int id);
+int modifier_tarif_velo(Base_Donnee_Location *bd, int id, double nouveau_tarif);
+int trouver_velo_par_id(Base_Donnee_Location *bd, int id);
+int louer_velo_par_client(Base_Donnee_Location *bd, int id_velo, int id_client);
+
 #endif

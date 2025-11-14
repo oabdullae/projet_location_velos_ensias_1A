@@ -1,5 +1,5 @@
-#ifndef CLIENT_H
-#define CLIENT_H
+#ifndef INTERFACE_H
+#define INTERFACE_H
 
 void print_interface();
 void print_menu();

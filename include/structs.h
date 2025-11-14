@@ -4,9 +4,9 @@
 typedef struct Client {
     int id;
     char *nom, *prenom, *telephone;
-    double duree_location;
-    double montant_location;
-    double velo_loue_id;
+    double duree_accumulee;
+    double montant_accumule;
+    int velo_loue_id; // 0 si le client ne loue aucun velo
 } Client;
 
 typedef struct Velo {
