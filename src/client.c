@@ -37,7 +37,7 @@ int retourner_velo_par_client(Base_Donnee_Location *bd, int id_client,
     return 0;
 }
 
-// int ajouter_nouveau_client() {
+// int ajouter_nouveau_client() prenom {
 //     client.velo_loue_id should be initialized at 0, meaning no rented bike by
 //     default
 //     init duree_accumulee by 0.0
@@ -110,13 +110,13 @@ int modifier_client(Base_Donnee_Location *bd, int id, int donnee_a_modifier,
 }
 
 void afficher_table_des_clients(Table_Client *clients_array) {
-    if (clients_array->size == 0)
-        printf("La table est vide\n\n");
+    if (clients_array == NULL || clients_array->size == 0)
+        printf("La table résultante est vide\n\n");
     else {
         printf("Affichage de la table des clients\n");
         printf("+----+-------------+-------------+-------------+--------+------"
             "----+-----------+\n");
-        printf("| ID |     Nom     |    Prenom   |  Telephone  |DureeAcc|Montan"
+        printf("| ID |     Nom     |    Prénom   |  Telephone  |DuréeAcc|Montan"
             "tAcc|LocataireDe|\n");
         printf("+----+-------------+-------------+-------------+--------+------"
             "----+-----------+\n");
@@ -404,6 +404,227 @@ void trier_tableau_des_clients(Base_Donnee_Location *bd, int ordre,
             }
             break;
     }
+}
+
+Table_Client *recherche_dichotomique_client_par_parametre(Base_Donnee_Location *bd,
+    int type_parametre, void *parametre) {
+    // les parametres possibles sont:
+        // NOM = 0,
+        // PRENOM,
+        // TELEPHONE,
+        // ID_CLIENT,
+        // VELO_LOUE_ID
+    Table_Client *results = malloc(sizeof(Table_Client));
+    results->capacity = 1;
+    results->increm_id = 1;
+    results->tab_client = NULL;
+    results->size = 0;
+    trier_tableau_des_clients(bd, CROISSANT, type_parametre);
+    switch (type_parametre) {
+        case NOM:
+        {
+            char *str_nom = (char *)parametre;
+            
+            int min = 0, max = bd->clients.size - 1;
+            while (min <= max) {
+                int mid = min + (max - min) / 2;
+                if (!strcmp(str_nom, bd->clients.tab_client[mid].nom)) {
+                    // move back the left to find first occurence (cuz sorted)
+                    int first_occ = mid;
+                    while (first_occ > 0 &&
+                        !strcmp(bd->clients.tab_client[first_occ].nom,
+                        bd->clients.tab_client[first_occ - 1].nom)) {
+                        --first_occ;
+                    }
+                    // then start collecting all occurences starting from the 
+                    // first
+                    for (int index = first_occ; index < bd->clients.size &&
+                        !strcmp(bd->clients.tab_client[index].nom,
+                            str_nom); ++index) {
+                        ++results->size;
+                        results->tab_client = realloc(results->tab_client, 
+                            results->size * sizeof(Client));
+                        results->tab_client[results->size-1] =
+                            bd->clients.tab_client[index];
+                    }
+                    return results;
+                }
+                else if (strcmp(str_nom,
+                    bd->clients.tab_client[mid].nom) < 0) {
+                    max = mid - 1;
+                }
+                else {
+                    min = mid + 1;
+                }
+            }
+            free(results);
+            return NULL; // not found
+        }
+            break;
+        case PRENOM:
+        {
+            char *str_prenom = (char *)parametre;
+            
+            int min = 0, max = bd->clients.size - 1;
+            while (min <= max) {
+                int mid = min + (max - min) / 2;
+                if (!strcmp(str_prenom, bd->clients.tab_client[mid].prenom)) {
+                    // move back the left to find first occurence (cuz sorted)
+                    int first_occ = mid;
+                    while (first_occ > 0 &&
+                        !strcmp(bd->clients.tab_client[first_occ].prenom,
+                        bd->clients.tab_client[first_occ - 1].prenom)) {
+                        --first_occ;
+                    }
+                    // then start collecting all occurences starting from the 
+                    // first
+                    for (int index = first_occ; index < bd->clients.size &&
+                        !strcmp(bd->clients.tab_client[index].prenom,
+                            str_prenom); ++index) {
+                        ++results->size;
+                        results->tab_client = realloc(results->tab_client, 
+                            results->size * sizeof(Client));
+                        results->tab_client[results->size-1] =
+                            bd->clients.tab_client[index];
+                    }
+                    return results;
+                }
+                else if (strcmp(str_prenom,
+                    bd->clients.tab_client[mid].prenom) < 0) {
+                    max = mid - 1;
+                }
+                else {
+                    min = mid + 1;
+                }
+            }
+            free(results);
+            return NULL; // not found
+        }
+            break;
+        case TELEPHONE:
+        {
+            char *str_telephone = (char *)parametre;
+
+            int min = 0, max = bd->clients.size - 1;
+            while (min <= max) {
+                int mid = min + (max - min) / 2;
+                if (!strcmp(str_telephone, 
+                    bd->clients.tab_client[mid].telephone)) {
+                    // move back the left to find first occurence (cuz sorted)
+                    int first_occ = mid;
+                    while (first_occ > 0 &&
+                        !strcmp(bd->clients.tab_client[first_occ].telephone,
+                        bd->clients.tab_client[first_occ - 1].telephone)) {
+                        --first_occ;
+                    }
+                    // then start collecting all occurences starting from the 
+                    // first
+                    for (int index = first_occ; index < bd->clients.size &&
+                        !strcmp(bd->clients.tab_client[index].telephone,
+                            str_telephone); ++index) {
+                        ++results->size;
+                        results->tab_client = realloc(results->tab_client, 
+                            results->size * sizeof(Client));
+                        results->tab_client[results->size-1] =
+                            bd->clients.tab_client[index];
+                    }
+                    return results;
+                }
+                else if (strcmp(str_telephone,
+                    bd->clients.tab_client[mid].telephone) < 0) {
+                    max = mid - 1;
+                }
+                else {
+                    min = mid + 1;
+                }
+            }
+            free(results);
+            return NULL; // not found
+        }
+            break;
+        case ID_CLIENT:
+        {
+            int *id = (int *)parametre;
+            
+            int min = 0, max = bd->clients.size - 1;
+            while (min <= max) {
+                int mid = min + (max - min) / 2;
+                if (*id == bd->clients.tab_client[mid].id) {
+                    // move back the left to find first occurence (cuz sorted)
+                    int first_occ = mid;
+                    while (first_occ > 0 &&
+                        bd->clients.tab_client[first_occ].id ==
+                        bd->clients.tab_client[first_occ - 1].id) {
+                        --first_occ;
+                    }
+                    // then start collecting all occurences starting from the 
+                    // first
+                    
+                    for (int index = first_occ; index < bd->clients.size &&
+                        bd->clients.tab_client[index].id == *id; ++index) {
+                        ++results->size;
+                        results->tab_client = realloc(results->tab_client, 
+                            results->size * sizeof(Client));
+                        results->tab_client[results->size-1] =
+                            bd->clients.tab_client[index];
+                    }
+                    return results;
+                }
+                else if (*id < bd->clients.tab_client[mid].id) {
+                    max = mid - 1;
+                }
+                else {
+                    min = mid + 1;
+                }
+            }
+
+            free(results);
+            return NULL; // not found
+        }
+            break;
+        case VELO_LOUE_ID:
+        {
+            int *velo_loue = (int *)parametre;
+
+            int min = 0, max = bd->clients.size - 1;
+            while (min <= max) {
+                int mid = min + (max - min) / 2;
+                if (*velo_loue == bd->clients.tab_client[mid].id) {
+                    // move back the left to find first occurence (cuz sorted)
+                    int first_occ = mid;
+                    while (first_occ > 0 &&
+                        bd->clients.tab_client[first_occ].id ==
+                        bd->clients.tab_client[first_occ - 1].id) {
+                        --first_occ;
+                    }
+                    // then start collecting all occurences starting from the 
+                    // first
+                    
+                    for (int index = first_occ; index < bd->clients.size &&
+                        bd->clients.tab_client[index].id == *velo_loue; ++index) {
+                        ++results->size;
+                        results->tab_client = realloc(results->tab_client, 
+                            results->size * sizeof(Client));
+                        results->tab_client[results->size-1] =
+                            bd->clients.tab_client[index];
+                    }
+                    return results;
+                }
+                else if (*velo_loue < bd->clients.tab_client[mid].id) {
+                    max = mid - 1;
+                }
+                else {
+                    min = mid + 1;
+                }
+            }
+
+            free(results);
+            return NULL; // not found
+        }
+        break;
+    }
+    
+    return NULL;
 }
 
 int trouver_client_par_id(Base_Donnee_Location *bd, int id_client) {

@@ -311,7 +311,7 @@ int main() {
                 char *str, prompt[1024];
                 sprintf(prompt, "Saisir le nouveau %s:", str_choix);
                 do {
-                    str = lire_chaine_dynamique("Saisir le nouveau : ");
+                    str = lire_chaine_dynamique(prompt);
                 } while (strlen(str) == 0);
                 int id;
                 do {
@@ -478,10 +478,115 @@ int main() {
                     ;  // flush buffer before reading
 
                 printf("Recherche par dichotomie des vélos\n(attention cette "
-                    "recherche trie le tableau en ordre croissant par ID avant la "
-                    "recherche)");
-                // trier_tableau_des_velos(par_id);
-                // rechercher_velo_par_dichotomie();
+                    "recherche trie le tableau en ordre croissant par le "
+                    "paramétre\nde votre recherche avant de commencer la "
+                    "recherche)\n\n");
+                Table_Velo *results;
+
+                char choix;
+                printf("Saisir le paramètre de recherche parmi les suivants\n");
+                printf("\t1. ID du vélo\n");
+                printf("\t2. Marque\n");
+                printf("\t3. Type\n");
+                printf("\t4. Prix par heure\n");
+                printf("\t5. Disponibilité\n");
+                printf("\t6. Locataire (ID)\n");
+               
+                do {
+                    choix = lire_caractere("\t> ");
+                } while (choix < '1' ||  choix > '6');
+                while ((c = getchar()) != '\n' && c != EOF)
+                    ;  // flush buffer before reading
+
+
+                switch (choix) {
+                    case '1':
+                        int id;
+                        do {
+                            id = lire_entier("\tSaisir la valeur de l'ID: ");
+                        } while (id <= 0);
+                        // call search
+                        results = recherche_dichotomique_velo_par_parametre(
+                            &bd_courante, ID_VELO, &id);
+                        // display result
+                        afficher_table_des_velos(results);
+
+                        break;
+                    case '2':
+                        char *temp_marque;
+                        do {
+                            temp_marque =
+                                lire_chaine_dynamique("\tSaisir la marque: ");
+                        } while (strlen(temp_marque) == 0);
+                        // call search
+                        results = recherche_dichotomique_velo_par_parametre(
+                            &bd_courante, MARQUE, temp_marque);
+                        // display result
+                        afficher_table_des_velos(results);
+
+                        free(temp_marque);
+                        break;
+                    case '3':
+                        char *temp_type;
+                        do {
+                            temp_type =
+                                lire_chaine_dynamique("\tSaisir le type: ");
+                        } while (strlen(temp_type) == 0);
+                        // call search
+                        results = recherche_dichotomique_velo_par_parametre(
+                            &bd_courante, TYPE, temp_type);
+                        // display result
+                        afficher_table_des_velos(results);
+                        
+                        free(temp_type);
+                        break;
+                    case '4':
+                        double pph;
+                        do {
+                            pph = lire_reel("\tSaisir la valeur du prix par "
+                                "heure: ");
+                        } while (pph <= 0.0);
+                        // call search
+                        results = recherche_dichotomique_velo_par_parametre(
+                            &bd_courante, PRIX_PAR_HEURE, &pph);
+                        // display result
+                        afficher_table_des_velos(results);
+
+                        break;
+                    case '5':
+                        int dispo;
+                        printf("\tRechercher les vélos disponibles?\n"
+                            "\t\t0. Non\n"
+                            "\t\t1. Oui\n");
+                        do {
+                            dispo = lire_caractere("\t> ");
+                        } while (dispo != '0' && dispo != '1');
+                        dispo -= '0'; // to convert it back to int values of 0/1
+                        // call search
+                        results = recherche_dichotomique_velo_par_parametre(
+                            &bd_courante, DISPONIBLE, &dispo);
+                        // display result
+                        afficher_table_des_velos(results);
+
+                        break;
+                    case '6':
+                        int id_locataire;
+                        do {
+                            id_locataire = lire_entier("\tSaisir la valeur du "
+                                "ID du locataire: ");
+                        } while (id_locataire <= 0);
+                        // call search
+                        results = recherche_dichotomique_velo_par_parametre(
+                            &bd_courante, LOUE_PAR_CLIENT, &id_locataire);
+                        // display result
+                        afficher_table_des_velos(results);
+                        break;
+                
+                }
+
+                // free the result pointer that we used to get search output
+                free(results);
+
             }
                 break;
 
@@ -595,10 +700,100 @@ int main() {
                     ;  // flush buffer before reading
 
                 printf("Recherche par dichotomie des clients\n(attention cette "
-                    "recherche trie le tableau en ordre croissant par ID avant la "
-                    "recherche)");
-                // trier_tableau_des_clients(par_id);
-                // rechercher_client_par_dichotomie();
+                    "recherche trie le tableau en ordre croissant par le "
+                    "paramétre\nde votre recherche avant de commencer la "
+                    "recherche)\n\n");
+                Table_Client *results;
+
+                char choix;
+                printf("Saisir le paramètre de recherche parmi les suivants\n");
+                printf("\t1. ID du client\n");
+                printf("\t2. Nom\n");
+                printf("\t3. Prénom\n");
+                printf("\t4. Téléphone\n");
+                printf("\t5. Vélo loué (ID)\n");
+               
+                do {
+                    choix = lire_caractere("\t> ");
+                } while (choix < '1' ||  choix > '5');
+                while ((c = getchar()) != '\n' && c != EOF)
+                    ;  // flush buffer before reading
+
+
+                switch (choix) {
+                    case '1':
+                        int id;
+                        do {
+                            id = lire_entier("\tSaisir la valeur de l'ID: ");
+                        } while (id <= 0);
+                        // call search
+                        results = recherche_dichotomique_client_par_parametre(
+                            &bd_courante, ID_CLIENT, &id);
+                        // display result
+                        afficher_table_des_clients(results);
+
+                        break;
+                    case '2':
+                        char *temp_nom;
+                        do {
+                            temp_nom =
+                                lire_chaine_dynamique("\tSaisir le Nom: ");
+                        } while (strlen(temp_nom) == 0);
+                        // call search
+                        results = recherche_dichotomique_client_par_parametre(
+                            &bd_courante, NOM, temp_nom);
+                        // display result
+                        afficher_table_des_clients(results);
+
+                        free(temp_nom);
+                        break;
+                    case '3':
+                        char *temp_prenom;
+                        do {
+                            temp_prenom =
+                                lire_chaine_dynamique("\tSaisir le Prénom: ");
+                        } while (strlen(temp_prenom) == 0);
+                        // call search
+                        results = recherche_dichotomique_client_par_parametre(
+                            &bd_courante, PRENOM, temp_prenom);
+                        // display result
+                        afficher_table_des_clients(results);
+                        
+                        free(temp_prenom);
+                        break;
+                    case '4':
+                        char *temp_telephone;
+                        do {
+                            temp_telephone =
+                                lire_chaine_dynamique("\tSaisir le téléphone:"
+                                    " ");
+                        } while (strlen(temp_telephone) == 0);
+                        // call search
+                        results = recherche_dichotomique_client_par_parametre(
+                            &bd_courante, TELEPHONE, temp_telephone);
+                        // display result
+                        afficher_table_des_clients(results);
+
+                        free(temp_telephone);
+                        break;
+                    case '5':
+                        int id_velo_loue;
+                        do {
+                            id_velo_loue = lire_entier("\tSaisir la valeur du "
+                                "ID du vélo loué: ");
+                        } while (id_velo_loue <= 0);
+                        // call search
+                        results = recherche_dichotomique_client_par_parametre(
+                            &bd_courante, LOUE_PAR_CLIENT, &id_velo_loue);
+                        // display result
+                        afficher_table_des_clients(results);
+
+                        break;
+                }
+
+                // free the result pointer that we used to get search output
+                free(results);
+
             }
                 break;
 

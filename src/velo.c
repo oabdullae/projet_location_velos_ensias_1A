@@ -95,8 +95,8 @@ int louer_velo_par_client(Base_Donnee_Location *bd, int id_velo, int id_client){
 }
 
 void afficher_table_des_velos(Table_Velo *velos_array) {
-    if (velos_array->size == 0)
-        printf("La table est vide\n\n");
+    if (velos_array == NULL || velos_array->size == 0)
+        printf("La table résultante est vide\n\n");
     else {
         printf("Affichage de la table des vélos\n");
         printf("+----+--------------------+--------------------+------------+--"
@@ -371,6 +371,271 @@ void trier_tableau_des_velos(Base_Donnee_Location *bd, int ordre,
     }
     
 }
+
+Table_Velo *recherche_dichotomique_velo_par_parametre(Base_Donnee_Location *bd,
+    int type_parametre, void *parametre) {
+    // les parametres possibles sont:
+        // MARQUE = 0,
+        // TYPE,
+        // PRIX_PAR_HEURE,
+        // DISPONIBLE,
+        // ID_VELO,
+        // LOUE_PAR_CLIENT
+    Table_Velo *results = malloc(sizeof(Table_Velo));
+    results->capacity = 1;
+    results->increm_id = 1;
+    results->tab_velo = NULL;
+    results->size = 0;
+    trier_tableau_des_velos(bd, CROISSANT, type_parametre);
+    switch (type_parametre) {
+        case MARQUE:
+        {
+            char *str_marque = (char *)parametre;
+
+            int min = 0, max = bd->velos.size - 1;
+            while (min <= max) {
+                int mid = min + (max - min) / 2;
+                if (!strcmp(str_marque, bd->velos.tab_velo[mid].marque)) {
+                    // move back the left to find first occurence (cuz sorted)
+                    int first_occ = mid;
+                    while (first_occ > 0 &&
+                        !strcmp(bd->velos.tab_velo[first_occ].marque,
+                        bd->velos.tab_velo[first_occ - 1].marque)) {
+                        --first_occ;
+                    }
+                    // then start collecting all occurences starting from the 
+                    // first
+                    for (int index = first_occ; index < bd->velos.size &&
+                        !strcmp(bd->velos.tab_velo[index].marque,
+                            str_marque); ++index) {
+                        ++results->size;
+                        results->tab_velo = realloc(results->tab_velo, 
+                            results->size * sizeof(Velo));
+                        results->tab_velo[results->size-1] =
+                            bd->velos.tab_velo[index];
+                    }
+                    return results;
+                }
+                else if (strcmp(str_marque,
+                    bd->velos.tab_velo[mid].marque) < 0) {
+                    max = mid - 1;
+                }
+                else {
+                    min = mid + 1;
+                }
+            }
+            free(results);
+            return NULL; // not found
+        }
+            break;
+        case TYPE:
+        {
+            char *str_type = (char *)parametre;
+
+            int min = 0, max = bd->velos.size - 1;
+            while (min <= max) {
+                int mid = min + (max - min) / 2;
+                if (!strcmp(str_type, bd->velos.tab_velo[mid].type)) {
+                    // move back the left to find first occurence (cuz sorted)
+                    int first_occ = mid;
+                    while (first_occ > 0 &&
+                        !strcmp(bd->velos.tab_velo[first_occ].type,
+                        bd->velos.tab_velo[first_occ - 1].type)) {
+                        --first_occ;
+                    }
+                    // then start collecting all occurences starting from the 
+                    // first
+                    
+                    for (int index = first_occ; index < bd->velos.size &&
+                        !strcmp(bd->velos.tab_velo[index].type,
+                        str_type); ++index) {
+                        ++results->size;
+                        results->tab_velo = realloc(results->tab_velo, 
+                            results->size * sizeof(Velo));
+                        results->tab_velo[results->size-1] =
+                            bd->velos.tab_velo[index];
+                    }
+                    return results;
+                }
+                else if (strcmp(str_type,
+                    bd->velos.tab_velo[mid].type) < 0) {
+                    max = mid - 1;
+                }
+                else {
+                    min = mid + 1;
+                }
+            }
+            free(results);
+            return NULL; // not found
+        }
+            break;
+        case PRIX_PAR_HEURE:
+        {
+            double *pph = (double *)parametre;
+            int min = 0, max = bd->velos.size - 1;
+            while (min <= max) {
+                int mid = min + (max - min) / 2;
+                if (*pph == bd->velos.tab_velo[mid].prix_par_heure) {
+                    // move back the left to find first occurence (cuz sorted)
+                    int first_occ = mid;
+                    while (first_occ > 0 &&
+                        bd->velos.tab_velo[first_occ].prix_par_heure ==
+                        bd->velos.tab_velo[first_occ - 1].prix_par_heure) {
+                        --first_occ;
+                    }
+                    // then start collecting all occurences starting from the 
+                    // first
+                    
+                    for (int index = first_occ; index < bd->velos.size &&
+                        bd->velos.tab_velo[index].prix_par_heure == *pph;
+                        ++index) {
+                        ++results->size;
+                        results->tab_velo = realloc(results->tab_velo, 
+                            results->size * sizeof(Velo));
+                        results->tab_velo[results->size-1] =
+                            bd->velos.tab_velo[index];
+                    }
+                    return results;
+                }
+                else if (*pph < bd->velos.tab_velo[mid].prix_par_heure) {
+                    max = mid - 1;
+                }
+                else {
+                    min = mid + 1;
+                }
+            }
+
+            free(results);
+            return NULL; // not found
+        }
+            break;
+        case DISPONIBLE:
+        {
+            int *dispo = (int *)parametre;
+            int min = 0, max = bd->velos.size - 1;
+            while (min <= max) {
+                int mid = min + (max - min) / 2;
+                if (*dispo == bd->velos.tab_velo[mid].disponible) {
+                    // move back the left to find first occurence (cuz sorted)
+                    int first_occ = mid;
+                    while (first_occ > 0 &&
+                        bd->velos.tab_velo[first_occ].disponible ==
+                        bd->velos.tab_velo[first_occ - 1].disponible) {
+                        --first_occ;
+                    }
+                    // then start collecting all occurences starting from the 
+                    // first
+                    
+                    for (int index = first_occ; index < bd->velos.size &&
+                        bd->velos.tab_velo[index].disponible == *dispo;
+                        ++index) {
+                        ++results->size;
+                        results->tab_velo = realloc(results->tab_velo, 
+                            results->size * sizeof(Velo));
+                        results->tab_velo[results->size-1] =
+                            bd->velos.tab_velo[index];
+                    }
+                    return results;
+                }
+                else if (*dispo < bd->velos.tab_velo[mid].disponible) {
+                    max = mid - 1;
+                }
+                else {
+                    min = mid + 1;
+                }
+            }
+
+            free(results);
+            return NULL; // not found
+        }
+            break;
+
+        case ID_VELO:
+        {
+            int *id = (int *)parametre;
+            int min = 0, max = bd->velos.size - 1;
+            while (min <= max) {
+                int mid = min + (max - min) / 2;
+                if (*id == bd->velos.tab_velo[mid].id) {
+                    // move back the left to find first occurence (cuz sorted)
+                    int first_occ = mid;
+                    while (first_occ > 0 &&
+                        bd->velos.tab_velo[first_occ].id ==
+                        bd->velos.tab_velo[first_occ - 1].id) {
+                        --first_occ;
+                    }
+                    // then start collecting all occurences starting from the 
+                    // first
+                    
+                    for (int index = first_occ; index < bd->velos.size &&
+                        bd->velos.tab_velo[index].id == *id; ++index) {
+                        ++results->size;
+                        results->tab_velo = realloc(results->tab_velo, 
+                            results->size * sizeof(Velo));
+                        results->tab_velo[results->size-1] =
+                            bd->velos.tab_velo[index];
+                    }
+                    return results;
+                }
+                else if (*id < bd->velos.tab_velo[mid].id) {
+                    max = mid - 1;
+                }
+                else {
+                    min = mid + 1;
+                }
+            }
+
+            free(results);
+            return NULL; // not found
+        }
+            break;
+
+        case LOUE_PAR_CLIENT:
+        {
+            int *loue_par_client = (int *)parametre;
+            int min = 0, max = bd->velos.size - 1;
+            while (min <= max) {
+                int mid = min + (max - min) / 2;
+                if (*loue_par_client == 
+                    bd->velos.tab_velo[mid].loue_par_client_id) {
+                    // move back the left to find first occurence (cuz sorted)
+                    int first_occ = mid;
+                    while (first_occ > 0 &&
+                        bd->velos.tab_velo[first_occ].loue_par_client_id ==
+                        bd->velos.tab_velo[first_occ - 1].loue_par_client_id) {
+                        --first_occ;
+                    }
+                    // then start collecting all occurences starting from the 
+                    // first
+                    
+                    for (int index = first_occ; index < bd->velos.size &&
+                        bd->velos.tab_velo[index].loue_par_client_id == 
+                        *loue_par_client; ++index) {
+                        ++results->size;
+                        results->tab_velo = realloc(results->tab_velo, 
+                            results->size * sizeof(Velo));
+                        results->tab_velo[results->size-1] =
+                            bd->velos.tab_velo[index];
+                    }
+                    return results;
+                }
+                else if (*loue_par_client < 
+                    bd->velos.tab_velo[mid].loue_par_client_id) {
+                    max = mid - 1;
+                }
+                else {
+                    min = mid + 1;
+                }
+            }
+
+            free(results);
+            return NULL; // not found
+        }       
+            break;
+    }
+    return NULL; // not found
+}
+
 
 // TODO: to be upgraded to accept any parameter not just id
 void afficher_velo_par_id(Base_Donnee_Location *bd, int id) {

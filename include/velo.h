@@ -37,5 +37,8 @@ Table_Velo *rechercher_velo_par_parametre(Base_Donnee_Location *bd,
     int type_parametre, void *parametre);
 void trier_tableau_des_velos(Base_Donnee_Location *bd, int ordre,
     int type_parametre);
+Table_Velo *recherche_dichotomique_velo_par_parametre(Base_Donnee_Location *bd,
+    int type_parametre, void *parametre);
+
 
 #endif
