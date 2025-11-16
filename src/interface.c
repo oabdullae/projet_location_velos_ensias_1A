@@ -11,7 +11,7 @@ void print_menu() {
     printf("\t+----------------------------------------------------------+\n");
     printf("\t| +------------------------------------------------------+ |\n");
     printf("\t| | >> Saisir x pour afficher ce menu si vous en avez << | |\n"); 
-    printf("\t| | >>        plus tard dans le programme             << | |\n");
+    printf("\t| | >>          plus tard dans le programme.          << | |\n");
     printf("\t| +------------------------------------------------------+ |\n");
     printf("\t| A. Gestion des vélos:                                    |\n");
     printf("\t|   a. Ajouter un nouveau vélo                             |\n");
@@ -23,28 +23,29 @@ void print_menu() {
     printf("\t|   f. Ajouter un client                                   |\n");
     printf("\t|   g. Supprimer un client                                 |\n");
     printf("\t|   h. Modifier les données d'un client                    |\n");
-    printf("\t| C. Recherche:                                            |\n");
+    printf("\t| C. Affichage des tables:                                            |\n");
+    printf("\t|   i. Affichage de la table des vélos                     |\n");
+    printf("\t|   j. Affichage de la table des clients                   |\n");
+    printf("\t| D. Recherche:                                            |\n");
                // recherche par un parametre: par id? par marque? par type? ... 
-    printf("\t|   i. Recherche linéaire d'un vélo                        |\n");
-    printf("\t|   j. Recherche par dichotomie d'un vélo                  |\n");
+    printf("\t|   k. Recherche linéaire d'un vélo                        |\n");
+    printf("\t|   l. Recherche par dichotomie d'un vélo                  |\n");
             // recherche par un parametre: par id? par nom? par prenom? etc ...
-    printf("\t|   k. Recherche linéaire d'un client                      |\n");
-    printf("\t|   l. Recherche par dichotomie d'un client                |\n");
-    printf("\t| D. Tri paramétré                                         |\n");
-    printf("\t|   m. Tri des vélos                                       |\n");
-    printf("\t|   n. Tri des clients                                     |\n");
-    printf("\t| E. Affichage des tables                                  |\n");
-    printf("\t|   o. Table des vélos                                     |\n");
-    printf("\t|   p. Table des clients                                   |\n");
+    printf("\t|   m. Recherche linéaire d'un client                      |\n");
+    printf("\t|   n. Recherche par dichotomie d'un client                |\n");
+    printf("\t| E. Tri paramétré                                         |\n");
+    printf("\t|   o. Tri des vélos                                       |\n");
+    printf("\t|   p. Tri des clients                                     |\n");
     printf("\t| F. Sauvegarder/Importer                                  |\n"); 
-                // prompt for tables with associated files
+    // prompt for tables with associated files
     printf("\t|   q. Sauvegarder                                         |\n");
-                // sauvegarde automatique ou prompt(if no previous file is set
-                //up for the current table) selon le parametrage
+    // sauvegarde automatique ou prompt(if no previous file is set
+    //up for the current table) selon le parametrage
     printf("\t|   r. Importer                                            |\n");
-    printf("\t| G. Statistiques                                          |\n");
+    printf("\t| G. Deduplication par un parametre                        |\n"); 
+    printf("\t| H. Statistiques                                          |\n");
     printf("\t|  (a implementer plus tard)                               |\n");
-    printf("\t| H. Outils                                                |\n");
+    printf("\t| I. Outils                                                |\n");
     printf("\t|  s. Réafficher le menu principal                         |\n");
                // sauvegarde automatique ou non
     printf("\t|  t. Parametres                                           |\n");

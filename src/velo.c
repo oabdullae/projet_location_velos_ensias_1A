@@ -1,5 +1,6 @@
 #include <malloc.h>
 #include <stdio.h>
+#include <string.h>
 #include "velo.h"
 #include "client.h"
 #include "error_codes.h"
@@ -36,6 +37,10 @@ int supprimer_velo_par_id(Base_Donnee_Location *bd, int id) {
     
     if (i == bd->velos.size)
         return ERR_VELO_NOT_FOUND;
+
+    if (bd->velos.tab_velo[i].disponible == 0) // velo is still rented
+        return ERR_VELO_DEJA_LOUE; // velo can't be deleted, it should be
+                                           // returned first
 
     // shifts back by one velo if necessary
     for (int j = i; j < bd->velos.size - 1; ++j) {//this loop won't execute if i 
@@ -85,8 +90,165 @@ int louer_velo_par_client(Base_Donnee_Location *bd, int id_velo, int id_client){
     
     bd->velos.tab_velo[i].loue_par_client_id = id_client;
     bd->velos.tab_velo[i].disponible = 0; // loué donc non disponible
-    bd->clients.tab_client[i].velo_loue_id = id_velo;
+    bd->clients.tab_client[j].velo_loue_id = id_velo;
     return 0;
+}
+
+void afficher_table_des_velos(Table_Velo *velos_array) {
+    if (velos_array->size == 0)
+        printf("La table est vide\n\n");
+    else {
+        printf("Affichage de la table des vélos\n");
+        printf("+----+--------------------+--------------------+------------+--"
+            "--------+-------+\n");
+        printf("| ID |       Marque       |        Type        |PrixParHeure|Di"
+            "sponible|LouéPar|\n");
+        printf("+----+--------------------+--------------------+------------+--"
+            "--------+-------+\n");
+        for (int i = 0; i < velos_array->size; ++i) {
+            printf("|%3d ", velos_array->tab_velo[i].id);
+            // ---------------------------------------------------------
+            int marque_length = strlen(velos_array->tab_velo[i].marque);
+            char etc = ' ';
+            if (marque_length > 20) {
+                marque_length = 19;
+                etc = '>';
+            }
+            printf("|%.*s", marque_length,
+                velos_array->tab_velo[i].marque);
+            if (marque_length < 19)
+                for (int j = 0; j < 19 - marque_length; ++j)
+                    putchar(' ');
+            putchar(etc);
+            // ---------------------------------------------------------
+            int type_length = strlen(velos_array->tab_velo[i].type);
+            etc = ' ';
+            if (type_length > 20) {
+                type_length = 19;
+                etc = '>';
+            }
+            printf("|%.*s", type_length,
+                velos_array->tab_velo[i].type);
+            if (type_length < 19)
+                for (int j = 0; j < 19 - type_length; ++j)
+                    putchar(' ');
+            putchar(etc);
+            // ---------------------------------------------------------
+            printf("| %-11.2lf",
+                velos_array->tab_velo[i].prix_par_heure);
+            // ---------------------------------------------------------
+            printf("|   %s    ",
+                (velos_array->tab_velo[i].disponible)?"oui":"non");
+            // ---------------------------------------------------------
+            if (!velos_array->tab_velo[i].disponible)
+                printf("|  %3d  |\n",
+                    velos_array->tab_velo[i].loue_par_client_id);
+            else
+                printf("|   --  |\n");
+        }
+        printf("+----+--------------------+--------------------+------------+--"
+            "--------+-------+\n");
+    }
+
+}
+
+// returns a struct that contains a dynamically allocated Velo array that stores
+// all the matches to be then passed to the display function
+Table_Velo *rechercher_velo_par_parametre(Base_Donnee_Location *bd,
+    int type_parametre, void *parametre) {
+    // les parametres possibles sont:
+        // MARQUE = 0,
+        // TYPE,
+        // PRIX_PAR_HEURE,
+        // DISPONIBLE,
+        // ID_VELO,
+        // LOUE_PAR_CLIENT
+    Table_Velo *results = malloc(sizeof(Table_Velo));
+    results->capacity = 1;
+    results->increm_id = 1;
+    results->tab_velo = NULL;
+    results->size = 0;
+    switch (type_parametre) {
+        case MARQUE:
+            char *str_marque = (char *)parametre;
+            for (int i = 0; i < bd->velos.size; ++i) {
+                if (!strcmp(str_marque, bd->velos.tab_velo[i].marque)) {
+                    ++results->size;
+                    results->tab_velo = realloc(results->tab_velo, 
+                        results->size * sizeof(Velo));
+                    results->tab_velo[results->size-1] =
+                        bd->velos.tab_velo[i];
+                }
+            }
+            break;
+        case TYPE:
+            char *str_type = (char *)parametre;
+            for (int i = 0; i < bd->velos.size; ++i) {
+                if (!strcmp(str_type, bd->velos.tab_velo[i].type)) {
+                    ++results->size;
+                    results->tab_velo = realloc(results->tab_velo, 
+                        results->size * sizeof(Velo));
+                    results->tab_velo[results->size-1] =
+                        bd->velos.tab_velo[i];
+                }
+            }
+            break;
+        case PRIX_PAR_HEURE:
+        double *pph = (double *)parametre;
+        for (int i = 0; i < bd->velos.size; ++i) {
+            if (*pph == bd->velos.tab_velo[i].prix_par_heure) {
+                ++results->size;
+                results->tab_velo = realloc(results->tab_velo, 
+                    results->size * sizeof(Velo));
+                results->tab_velo[results->size-1] =
+                    bd->velos.tab_velo[i];
+            }
+        }
+        break;
+        case DISPONIBLE:
+            int *dispo = (int *)parametre;
+            for (int i = 0; i < bd->velos.size; ++i) {
+                if (*dispo == bd->velos.tab_velo[i].disponible) {
+                    ++results->size;
+                    results->tab_velo = realloc(results->tab_velo, 
+                        results->size * sizeof(Velo));  // add one more 
+                                                                // slot
+                    results->tab_velo[results->size-1] =
+                        bd->velos.tab_velo[i]; // store matching velo in results
+                }
+            }
+            break;
+        case ID_VELO:
+            int *id = (int *)parametre;
+            for (int i = 0; i < bd->velos.size; ++i) {
+                if (*id == bd->velos.tab_velo[i].id) {
+                    ++results->size;
+                    results->tab_velo = realloc(results->tab_velo, 
+                        results->size * sizeof(Velo));  // add one more 
+                                                                // slot
+                    results->tab_velo[results->size-1] =
+                        bd->velos.tab_velo[i]; // store matching velo in results
+                    break; // cuz id is unique, no need to keep iterating
+                }
+            }
+            break;
+        case LOUE_PAR_CLIENT:
+            int *loue_par_client = (int *)parametre;
+            for (int i = 0; i < bd->velos.size; ++i) {
+                if (*loue_par_client == 
+                    bd->velos.tab_velo[i].loue_par_client_id) {
+                    ++results->size;
+                    results->tab_velo = realloc(results->tab_velo, 
+                        results->size * sizeof(Velo));  // add one more 
+                                                                // slot
+                    results->tab_velo[results->size-1] =
+                        bd->velos.tab_velo[i]; // store matching velo in results
+                    break; // cuz a bike can be rented by only one client 
+                }
+            }
+            break;
+    }
+    return results;
 }
 
 // TODO: to be upgraded to accept any parameter not just id
@@ -123,7 +285,8 @@ int trouver_velo_par_id(Base_Donnee_Location *bd, int id) {
 }
 
 int doubler_taille_tab_velo(Base_Donnee_Location *bd) {
-    Velo *tmp_velo = realloc(bd->velos.tab_velo, bd->velos.capacity * 2);
+    Velo *tmp_velo = realloc(bd->velos.tab_velo,
+        bd->velos.capacity * 2 * sizeof(Velo));
     if (tmp_velo == NULL) {
         return -1;
     }

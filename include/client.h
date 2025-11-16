@@ -3,6 +3,14 @@
 
 #include "structs.h"
 
+typedef enum {
+    NOM = 0,
+    PRENOM,
+    TELEPHONE,
+    ID_CLIENT,
+    VELO_LOUE_ID
+} DONNEES_CLIENT;
+
 /* 
 typedef struct Client {
     int id;
@@ -20,5 +28,12 @@ int retourner_velo_par_client(Base_Donnee_Location *bd, int id_client,
 int doubler_taille_tab_client(Base_Donnee_Location *bd);
 int ajouter_nouveau_client(Base_Donnee_Location *bd, char *nom, char *prenom,
     char *telephone);
+int supprimer_client_par_id(Base_Donnee_Location *bd, int id);
+int modifier_client(Base_Donnee_Location *bd, int id, int donnee_a_modifier,
+    char *nouvelle_donnee);
+void afficher_table_des_clients(Table_Client *tc);
+
+Table_Client *rechercher_client_par_parametre(Base_Donnee_Location *bd,
+    int type_parametre, void *parametre);
 
 #endif
