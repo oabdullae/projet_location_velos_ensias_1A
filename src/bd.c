@@ -7,7 +7,6 @@ void init_base_donnee(Base_Donnee_Location *bd) {
     bd->velos.increm_id = bd->clients.increm_id = 1;
     bd->velos.tab_velo = malloc(bd->velos.capacity * sizeof(Velo));
     bd->clients.tab_client = malloc(bd->clients.capacity * sizeof(Client));
-    bd->fichier_associe = 0; // pas de fichier associe au depart
 }
 
 void deallocate_base_donnee(Base_Donnee_Location *bd) {

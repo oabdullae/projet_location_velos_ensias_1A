@@ -655,7 +655,7 @@ int dedupliquer_velo_par_parametre(Base_Donnee_Location *bd,
             // and once we know ther's a first occurence, we start eliminating 
             // the other occurences
             int status = 0;
-            for (int i = first_occ + 1; i < first_occ+1 + iterations; ++i) {
+            for (int i = first_occ + 1; i < bd->velos.size; ++i) {
                 if (!strcmp(str_marque, bd->velos.tab_velo[i].marque)) {
                     if (supprimer_velo_par_id(bd, bd->velos.tab_velo[i].id) == 
                         ERR_VELO_DEJA_LOUE) {
@@ -684,7 +684,7 @@ int dedupliquer_velo_par_parametre(Base_Donnee_Location *bd,
             // and once we know ther's a first occurence, we start eliminating 
             // the other occurences
             int status = 0;
-            for (int i = first_occ + 1; i < first_occ+1 + iterations; ++i) {
+            for (int i = first_occ + 1; i < bd->velos.size; ++i) {
                 if (!strcmp(str_type, bd->velos.tab_velo[i].type)) {
                     if (supprimer_velo_par_id(bd, bd->velos.tab_velo[i].id) == 
                         ERR_VELO_DEJA_LOUE) {

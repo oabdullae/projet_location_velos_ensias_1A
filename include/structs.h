@@ -39,8 +39,6 @@ typedef struct {
 typedef struct {
     Table_Velo velos;
     Table_Client clients;
-    int fichier_associe; // booléen, = 1 si la base de donnee est deja associe
-                         // a un fichier, et = 0 sinon
 } Base_Donnee_Location;
 
 #endif

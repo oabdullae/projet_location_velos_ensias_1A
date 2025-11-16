@@ -1087,55 +1087,70 @@ int main() {
 
             // =================================================================
 
-            case 't': case 'T':
+            case 's': case 'S':
+            {
+                // void export_bd(Base_Donnee_Location *bd);
+
+                while ((c = getchar()) != '\n' && c != EOF)
+                    ;  // flush buffer before reading
+
+                printf("Export\n"
+                    "(attention si vous avez une autre base de donnee "
+                    "sauvegardée sous le nom \nsaved_bd.loc elle sera écrasé)"
+                    "\n\t1. Continuer\n\t2. Annuler\n");
+                char choix;
+                do {
+                    choix = lire_caractere("\t> ");
+                } while (choix < '1' || choix > '2');
+                if (choix == '1') {
+                    if (export_bd(&bd_courante) != 0) {
+                        printf("### échec d'ouverture du fichier saved_bd.loc\n\n");
+                    } 
+                    else {
+                        printf("Sauvegarde réussie\n\n");
+                    }
+                }
+                else {
+                    printf("Export Annulé\n\n");
+                }
+            }
+                break;
 
             // =================================================================
 
-            case 's': case 'S':
+            case 't': case 'T':
+            {
+                // void import_bd(Base_Donnee_Location *bd);
+                
+                while ((c = getchar()) != '\n' && c != EOF)
+                    ;  // flush buffer before reading
+
+                printf("Import\n");
+                if (import_bd(&bd_courante) != 0) {
+                    printf("### échec d'ouverture du fichier saved_bd.loc\n\n");
+                }
+                else
+                    printf("Chargement réussi\n\n");
+            }
+                break;
             
             // =================================================================
 
             case 'u': case 'U':
+            {
+                
+            }
 
             // =================================================================
 
             case 'v': case 'V':
-                while ((c = getchar()) != '\n' && c != EOF)
-                    ;  // flush buffer before reading
-                // TODO: move this out of here
-                printf("Affichage d'un velo:\n");
-                int id = lire_entier("Saisir l'ID: ");
-                afficher_velo_par_id(&bd_courante, id);
-                break;
+
 
             // =================================================================
 
             case 'w': case 'W':
-                while ((c = getchar()) != '\n' && c != EOF)
-                    ;  // flush buffer before reading
 
-                // TODO: move this out of here
-                // TODO: make this a separate function
-                if (bd_courante.velos.size != 0)
-                    printf("Affichage de la table des velos\n");
-                else
-                    printf("Le tableau des velos est vide\n");
-                for (int i = 0; i < bd_courante.velos.size; ++i) {
-                    printf("\n------\n\n");
-                    printf("\tid = %d\n", bd_courante.velos.tab_velo[i].id);
-                    printf("\tmarque = %s\n",
-                           bd_courante.velos.tab_velo[i].marque);
-                    printf("\ttype = %s\n", bd_courante.velos.tab_velo[i].type);
-                    printf("\tprix par heure = %.2lf\n",
-                           bd_courante.velos.tab_velo[i].prix_par_heure);
-                    printf("\tdiponible? = %s\n",
-                        (bd_courante.velos.tab_velo[i].disponible)?"oui":"non");
-                    if (!bd_courante.velos.tab_velo[i].disponible)
-                        printf("\tloué par le client avec id = %d\n",
-                            bd_courante.velos.tab_velo[i].loue_par_client_id);
-                }
-                printf("\n\n");
-                break;
+
 
             // =================================================================
 
