@@ -636,6 +636,70 @@ Table_Velo *recherche_dichotomique_velo_par_parametre(Base_Donnee_Location *bd,
     return NULL; // not found
 }
 
+int dedupliquer_velo_par_parametre(Base_Donnee_Location *bd,
+    int type_parametre, void *parametre) {
+    switch (type_parametre) {
+        case MARQUE:
+        {
+            char *str_marque = (char *)parametre;
+            int first_occ = -1;
+            // find the first occurence
+            for (int i = 0; i < bd->velos.size; ++i) {
+                if (!strcmp(str_marque, bd->velos.tab_velo[i].marque)) {
+                    first_occ = i;
+                    break;
+                }
+            }
+            if (first_occ == -1)
+                return ERR_VELO_NOT_FOUND;
+            // and once we know ther's a first occurence, we start eliminating 
+            // the other occurences
+            int status = 0;
+            for (int i = first_occ + 1; i < first_occ+1 + iterations; ++i) {
+                if (!strcmp(str_marque, bd->velos.tab_velo[i].marque)) {
+                    if (supprimer_velo_par_id(bd, bd->velos.tab_velo[i].id) == 
+                        ERR_VELO_DEJA_LOUE) {
+                        status = ERR_VELO_DEJA_LOUE;
+                    }
+                    --i; // shift i backwards cuz the element it used to 
+                    // index is eliminated and the new one should be tested
+                }
+            }
+            return status;
+        }
+            break;
+        case TYPE:
+        {
+            char *str_type = (char *)parametre;
+            int first_occ = -1;
+            // find the first occurence
+            for (int i = 0; i < bd->velos.size; ++i) {
+                if (!strcmp(str_type, bd->velos.tab_velo[i].type)) {
+                    first_occ = i;
+                    break;
+                }
+            }
+            if (first_occ == -1)
+                return ERR_VELO_NOT_FOUND;
+            // and once we know ther's a first occurence, we start eliminating 
+            // the other occurences
+            int status = 0;
+            for (int i = first_occ + 1; i < first_occ+1 + iterations; ++i) {
+                if (!strcmp(str_type, bd->velos.tab_velo[i].type)) {
+                    if (supprimer_velo_par_id(bd, bd->velos.tab_velo[i].id) == 
+                        ERR_VELO_DEJA_LOUE) {
+                        status = ERR_VELO_DEJA_LOUE;
+                    }
+                    --i; // shift i backwards cuz the element it used to 
+                    // index is eliminated and the new one should be tested
+                }
+            }
+            return status;
+        }
+            break;
+    }
+    return 0;
+}
 
 // TODO: to be upgraded to accept any parameter not just id
 void afficher_velo_par_id(Base_Donnee_Location *bd, int id) {

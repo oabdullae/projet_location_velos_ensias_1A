@@ -940,15 +940,151 @@ int main() {
             {
                 while ((c = getchar()) != '\n' && c != EOF)
                     ;  // flush buffer before reading
-                
-                // printf("Export/Sauvegarder\n");
+
+                char choix;
+                printf("Déduplication des vélos\n");
+                printf("Saisir le paramètre de déduplication parmi les "
+                    "suivants \n(/!\\attention la déduplication ne garde que la "
+                    "première occcurence)\n");
+                printf("\t1. Marque\n");
+                printf("\t2. Type\n");
+                do {
+                    choix = lire_caractere("\t> ");
+                } while (choix < '1' ||  choix > '2');
+
+                while ((c = getchar()) != '\n' && c != EOF)
+                    ;  // flush buffer before reading
+
+                switch (choix) {
+                    case '1':
+                        char *temp_marque;
+                        do {
+                            temp_marque =
+                                lire_chaine_dynamique("\tSaisir la marque: ");
+                        } while (strlen(temp_marque) == 0);
+                        switch (dedupliquer_velo_par_parametre(&bd_courante, 
+                            MARQUE, temp_marque)) {
+                            case ERR_VELO_NOT_FOUND:
+                                printf("\n### ERREUR: Echéc de déduplication "
+                                    "du vélo, vélo introuvable\n\n");
+                                break;
+                            case ERR_VELO_DEJA_LOUE:
+                                printf("\n### ALERTE: Quelques vélos ne sont "
+                                    "pas supprimés car ils sont déjà loués, "
+                                    "ils doivent être retournés d'abord\n\n");
+                                break;
+                            case 0:
+                                printf("Déduplication réussie.\n\n");
+                                    
+                        }
+
+                        free(temp_marque);
+                        break;
+                    case '2':
+                        char *temp_type;
+                        do {
+                            temp_type =
+                                lire_chaine_dynamique("\tSaisir le type: ");
+                        } while (strlen(temp_type) == 0);
+                        switch (dedupliquer_velo_par_parametre(&bd_courante, 
+                            TYPE, temp_type)) {
+                            case ERR_VELO_NOT_FOUND:
+                                printf("\n### ERREUR: Echéc de déduplication "
+                                    "du vélo, vélo introuvable\n\n");
+                                break;
+                            case ERR_VELO_DEJA_LOUE:
+                                printf("\n### ALERTE: Quelques vélos ne sont "
+                                    "pas supprimés car ils sont déjà loués, \n"
+                                    "ils doivent être retournés d'abord\n\n");
+                                break;
+                            case 0:
+                                printf("Déduplication réussie.\n\n");
+                                    
+                        }
+
+                        free(temp_type);
+                        break;
+                }
 
             }
                 break;
+
             // =================================================================
 
             case 'r': case 'R':
-            
+            {
+                while ((c = getchar()) != '\n' && c != EOF)
+                    ;  // flush buffer before reading
+
+                char choix;
+                printf("Déduplication des clients\n");
+                printf("Saisir le paramètre de déduplication parmi les "
+                    "suivants \n(/!\\attention la déduplication ne garde que la "
+                    "première occcurence)\n");
+                printf("\t1. Nom\n");
+                printf("\t2. Prénom\n");
+
+                do {
+                    choix = lire_caractere("\t> ");
+                } while (choix < '1' ||  choix > '2');
+
+                while ((c = getchar()) != '\n' && c != EOF)
+                    ;  // flush buffer before reading
+
+                switch (choix) {
+                    case '1':
+                        char *temp_nom;
+                        do {
+                            temp_nom =
+                                lire_chaine_dynamique("\tSaisir le Nom: ");
+                        } while (strlen(temp_nom) == 0);
+                        switch (dedupliquer_client_par_parametre(&bd_courante, 
+                            NOM, temp_nom)) {
+                            case ERR_CLIENT_NOT_FOUND:
+                                printf("\n### ERREUR: Echéc de déduplication "
+                                    "du client, client introuvable\n\n");
+                                break;
+                            case ERR_CLIENT_LOUE_DEJA_1VELO:
+                                printf("\n### ALERTE: Quelques clients ne sont "
+                                    "pas supprimés car ils louent des vélos, \n"
+                                    "ils doivent les retourner d'abord\n\n");
+                                break;
+                            case 0:
+                                printf("Déduplication réussie.\n\n");
+                                    
+                        }
+
+                        free(temp_nom);
+                        break;
+                    case '2':
+                        char *temp_prenom;
+                        do {
+                            temp_prenom =
+                                lire_chaine_dynamique("\tSaisir le Prénom: ");
+                        } while (strlen(temp_prenom) == 0);
+                        switch (dedupliquer_client_par_parametre(&bd_courante, 
+                            PRENOM, temp_prenom)) {
+                            case ERR_CLIENT_NOT_FOUND:
+                                printf("\n### ERREUR: Echéc de déduplication "
+                                    "du client, client introuvable\n\n");
+                                break;
+                            case ERR_CLIENT_LOUE_DEJA_1VELO:
+                                printf("\n### ALERTE: Quelques clients ne sont "
+                                    "pas supprimés car ils louent des vélos, \n"
+                                    "ils doivent les retourner d'abord\n\n");
+                                break;
+                            case 0:
+                                printf("Déduplication réussie.\n\n");
+                                    
+                        }
+
+                        free(temp_prenom);
+                        break;
+                }
+
+            }
+                break;
+
             // =================================================================
 
             case 't': case 'T':

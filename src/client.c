@@ -406,8 +406,8 @@ void trier_tableau_des_clients(Base_Donnee_Location *bd, int ordre,
     }
 }
 
-Table_Client *recherche_dichotomique_client_par_parametre(Base_Donnee_Location *bd,
-    int type_parametre, void *parametre) {
+Table_Client *recherche_dichotomique_client_par_parametre(
+    Base_Donnee_Location *bd, int type_parametre, void *parametre) {
     // les parametres possibles sont:
         // NOM = 0,
         // PRENOM,
@@ -468,7 +468,8 @@ Table_Client *recherche_dichotomique_client_par_parametre(Base_Donnee_Location *
             int min = 0, max = bd->clients.size - 1;
             while (min <= max) {
                 int mid = min + (max - min) / 2;
-                if (!strcmp(str_prenom, bd->clients.tab_client[mid].prenom)) {
+                if (!strcmp(str_prenom, 
+                    bd->clients.tab_client[mid].prenom)) {
                     // move back the left to find first occurence (cuz sorted)
                     int first_occ = mid;
                     while (first_occ > 0 &&
@@ -601,7 +602,8 @@ Table_Client *recherche_dichotomique_client_par_parametre(Base_Donnee_Location *
                     // first
                     
                     for (int index = first_occ; index < bd->clients.size &&
-                        bd->clients.tab_client[index].id == *velo_loue; ++index) {
+                        bd->clients.tab_client[index].id == *velo_loue;
+                        ++index) {
                         ++results->size;
                         results->tab_client = realloc(results->tab_client, 
                             results->size * sizeof(Client));
@@ -625,6 +627,74 @@ Table_Client *recherche_dichotomique_client_par_parametre(Base_Donnee_Location *
     }
     
     return NULL;
+}
+
+int dedupliquer_client_par_parametre(Base_Donnee_Location *bd,
+    int type_parametre, void *parametre) {
+    switch (type_parametre) {
+        case NOM:
+        {
+            char *str_nom = (char *)parametre;
+            int first_occ = -1;
+            // find the first occurence
+            for (int i = 0; i < bd->clients.size; ++i) {
+                if (!strcmp(str_nom, bd->clients.tab_client[i].nom)) {
+                    first_occ = i;
+                    break;
+                }
+            }
+            if (first_occ == -1)
+                return ERR_CLIENT_NOT_FOUND;
+            // and once we know ther's a first occurence, we start eliminating 
+            // the other occurences
+            int status = 0;
+            for (int i = first_occ + 1; i < bd->clients.size; ++i) {
+                if (!strcmp(str_nom, bd->clients.tab_client[i].nom)) {
+                    if (supprimer_client_par_id(bd, bd->clients.tab_client[i].id) == 
+                        ERR_CLIENT_LOUE_DEJA_1VELO) {
+                        status = ERR_CLIENT_LOUE_DEJA_1VELO;
+                    }
+                    --i; // shift i backwards cuz the element it used to 
+                    // index is eliminated and the new one should be tested
+                }
+            }
+            return status;
+        }
+            break;
+        case PRENOM:
+        {
+            char *str_prenom = (char *)parametre;
+            int first_occ = -1;
+            // find the first occurence
+            for (int i = 0; i < bd->clients.size; ++i) {
+                if (!strcmp(str_prenom,
+                    bd->clients.tab_client[i].prenom)) {
+                    first_occ = i;
+                    break;
+                }
+            }
+            if (first_occ == -1)
+                return ERR_CLIENT_NOT_FOUND;
+            // and once we know ther's a first occurence, we start eliminating 
+            // the other occurences
+            int status = 0;
+            for (int i = first_occ + 1; i < bd->clients.size; ++i) {
+                if (!strcmp(str_prenom,
+                    bd->clients.tab_client[i].prenom)) {
+                    if (supprimer_client_par_id(bd, 
+                        bd->clients.tab_client[i].id) == 
+                        ERR_CLIENT_LOUE_DEJA_1VELO) {
+                        status = ERR_CLIENT_LOUE_DEJA_1VELO;
+                    }
+                    --i; // shift i backwards cuz the element it used to 
+                    // index is eliminated and the new one should be tested
+                }
+            }
+            return status;
+        }
+            break;
+    }
+    return 0;
 }
 
 int trouver_client_par_id(Base_Donnee_Location *bd, int id_client) {

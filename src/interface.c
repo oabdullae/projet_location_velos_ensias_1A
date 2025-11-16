@@ -36,15 +36,17 @@ void print_menu() {
     printf("\t| E. Tri paramétré                                         |\n");
     printf("\t|   o. Tri des vélos                                       |\n");
     printf("\t|   p. Tri des clients                                     |\n");
-    printf("\t| F. Deduplication par un parametre                        |\n"); 
+    printf("\t| F. Déduplication selon un parametre                      |\n"); 
+    printf("\t|   q. Déduplication dans la table des vélos               |\n");
+    printf("\t|   r. Déduplication dans la table des clients             |\n");
     printf("\t| G. Sauvegarder/Importer                                  |\n"); 
     // prompt for tables with associated files
-    printf("\t|   q. Sauvegarder                                         |\n");
+    printf("\t|   s. Sauvegarder                                         |\n");
     // sauvegarde automatique ou prompt(if no previous file is set
     //up for the current table) selon le parametrage
-    printf("\t|   r. Importer                                            |\n");
+    printf("\t|   t. Importer                                            |\n");
     printf("\t| H. Statistiques                                          |\n");
-    printf("\t|  (a implementer plus tard)                               |\n");
+    printf("\t|  (a implementer plus tard) u v w                         |\n");
     printf("\t| I. Outils                                                |\n");
         // sauvegarde automatique ou non
     printf("\t|  x. Parametres                                           |\n");

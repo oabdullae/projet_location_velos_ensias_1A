@@ -41,5 +41,7 @@ void trier_tableau_des_clients(Base_Donnee_Location *bd, int ordre,
     int type_parametre);
 Table_Client *recherche_dichotomique_client_par_parametre(Base_Donnee_Location *bd,
     int type_parametre, void *parametre);
+int dedupliquer_client_par_parametre(Base_Donnee_Location *bd,
+    int type_parametre, void *parametre);
 
 #endif
