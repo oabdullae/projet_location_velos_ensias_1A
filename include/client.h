@@ -8,7 +8,9 @@ typedef enum {
     PRENOM,
     TELEPHONE,
     ID_CLIENT,
-    VELO_LOUE_ID
+    VELO_LOUE_ID,
+    DUREE_ACC,
+    MONTANT_ACC
 } DONNEES_CLIENT;
 
 /* 
@@ -35,5 +37,7 @@ void afficher_table_des_clients(Table_Client *tc);
 
 Table_Client *rechercher_client_par_parametre(Base_Donnee_Location *bd,
     int type_parametre, void *parametre);
+void trier_tableau_des_clients(Base_Donnee_Location *bd, int ordre,
+    int type_parametre);
 
 #endif

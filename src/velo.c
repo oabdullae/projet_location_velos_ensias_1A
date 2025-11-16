@@ -251,6 +251,127 @@ Table_Velo *rechercher_velo_par_parametre(Base_Donnee_Location *bd,
     return results;
 }
 
+void trier_tableau_des_velos(Base_Donnee_Location *bd, int ordre,
+    int type_parametre) {
+    // we gonna use insertion sort 
+    switch (type_parametre) {
+        case ID_VELO:
+            for (int i = 1; i < bd->velos.size; ++i) {
+                Velo temp_velo = bd->velos.tab_velo[i];
+                int j = i;
+                while (j > 0 && 
+                    (
+                        (ordre == CROISSANT && temp_velo.id < 
+                            bd->velos.tab_velo[j-1].id)
+                        ||
+                        (ordre == DECROISSANT && temp_velo.id > 
+                            bd->velos.tab_velo[j-1].id)
+                    )
+                ) {
+                    bd->velos.tab_velo[j] = bd->velos.tab_velo[j-1];
+                    --j;
+                }
+                bd->velos.tab_velo[j] = temp_velo;
+            }
+            break;
+        case MARQUE:
+            for (int i = 1; i < bd->velos.size; ++i) {
+                Velo temp_velo = bd->velos.tab_velo[i];
+                int j = i;
+                while (j > 0 && 
+                    (
+                        (ordre == CROISSANT && strcmp(temp_velo.marque, 
+                            bd->velos.tab_velo[j-1].marque) < 0)
+                        ||
+                        (ordre == DECROISSANT && strcmp(temp_velo.marque, 
+                            bd->velos.tab_velo[j-1].marque) > 0)
+                    )
+                ) {
+                    bd->velos.tab_velo[j] = bd->velos.tab_velo[j-1];
+                    --j;
+                }
+                bd->velos.tab_velo[j] = temp_velo;
+            }
+            break;
+        case TYPE:
+            for (int i = 1; i < bd->velos.size; ++i) {
+                Velo temp_velo = bd->velos.tab_velo[i];
+                int j = i;
+                while (j > 0 && 
+                    (
+                        (ordre == CROISSANT && strcmp(temp_velo.type, 
+                            bd->velos.tab_velo[j-1].type) < 0)
+                        ||
+                        (ordre == DECROISSANT && strcmp(temp_velo.type, 
+                            bd->velos.tab_velo[j-1].type) > 0)
+                    )
+                ) {
+                    bd->velos.tab_velo[j] = bd->velos.tab_velo[j-1];
+                    --j;
+                }
+                bd->velos.tab_velo[j] = temp_velo;
+            }
+            break;
+        case PRIX_PAR_HEURE:
+            for (int i = 1; i < bd->velos.size; ++i) {
+                Velo temp_velo = bd->velos.tab_velo[i];
+                int j = i;
+                while (j > 0 && 
+                    (
+                        (ordre == CROISSANT && temp_velo.prix_par_heure < 
+                            bd->velos.tab_velo[j-1].prix_par_heure)
+                        || 
+                        (ordre == DECROISSANT && temp_velo.prix_par_heure > 
+                            bd->velos.tab_velo[j-1].prix_par_heure)
+                    )
+                ) {
+                    bd->velos.tab_velo[j] = bd->velos.tab_velo[j-1];
+                    --j;
+                }
+                bd->velos.tab_velo[j] = temp_velo;
+            }
+            break;
+        case DISPONIBLE:    // I know sorting booleans with insertion sort is 
+                            // overkill, but my laziness is undefeatable :P
+            for (int i = 1; i < bd->velos.size; ++i) {
+                Velo temp_velo = bd->velos.tab_velo[i];
+                int j = i;
+                while (j > 0 && 
+                    (
+                        (ordre == CROISSANT && temp_velo.disponible < 
+                            bd->velos.tab_velo[j-1].disponible) || 
+                        (ordre == DECROISSANT && temp_velo.disponible > 
+                            bd->velos.tab_velo[j-1].disponible)
+                    )
+                ) {
+                    bd->velos.tab_velo[j] = bd->velos.tab_velo[j-1];
+                    --j;
+                }
+                bd->velos.tab_velo[j] = temp_velo;
+            }
+            break;
+        case LOUE_PAR_CLIENT:
+            for (int i = 1; i < bd->velos.size; ++i) {
+                Velo temp_velo = bd->velos.tab_velo[i];
+                int j = i;
+                while (j > 0 && 
+                    (
+                        (ordre == CROISSANT && temp_velo.loue_par_client_id < 
+                        bd->velos.tab_velo[j-1].loue_par_client_id) || 
+                        (ordre == DECROISSANT && temp_velo.loue_par_client_id > 
+                        bd->velos.tab_velo[j-1].loue_par_client_id)
+                    )
+                ) {
+                    bd->velos.tab_velo[j] = bd->velos.tab_velo[j-1];
+                    --j;
+                }
+                bd->velos.tab_velo[j] = temp_velo;
+            }
+            break;
+    }
+    
+}
+
 // TODO: to be upgraded to accept any parameter not just id
 void afficher_velo_par_id(Base_Donnee_Location *bd, int id) {
     int i = trouver_velo_par_id(bd, id);

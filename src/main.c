@@ -603,7 +603,7 @@ int main() {
                 break;
 
             // =================================================================
-
+            
             case 'o': case 'O':
             {
                 while ((c = getchar()) != '\n' && c != EOF)
@@ -612,8 +612,58 @@ int main() {
                 printf("Tri paramétré des vélos\n");
                 // parametre d'ordre (croissant, decroissant)
                 // parametre du tri (id, marque, type, pph, "dispo", locataire)
+                printf("\tTri par ordre:\n"
+                    "\t\t1. Croissant\n"
+                    "\t\t2. Décroissant\n");
+                char ordre;
+                do {
+                    ordre = lire_caractere("\t> ");
+                } while (ordre != '1' && ordre != '2');
+                ordre -= '0'; // to convert it back to int values of 1/2
 
-                // trier_tableau_des_velos();
+                while ((c = getchar()) != '\n' && c != EOF)
+                    ;  // flush buffer before reading
+
+                printf("Saisir le paramètre de tri parmi les suivants\n");
+                printf("\t1. ID du vélo\n");
+                printf("\t2. Marque\n");
+                printf("\t3. Type\n");
+                printf("\t4. Prix par heure\n");
+                printf("\t5. Disponibilité\n");
+                printf("\t6. Locataire (ID)\n");
+                char choix;
+                do {
+                    choix = lire_caractere("\t> ");
+                } while (choix < '1' ||  choix > '6');
+
+                while ((c = getchar()) != '\n' && c != EOF)
+                    ;  // flush buffer before reading
+
+                switch (choix) {
+                    case '1':
+                        trier_tableau_des_velos(&bd_courante, ordre,  ID_VELO);
+                        break;
+                    case '2':
+                        trier_tableau_des_velos(&bd_courante, ordre, MARQUE);
+                        break;
+                    case '3':
+                        trier_tableau_des_velos(&bd_courante, ordre, TYPE);
+                        break;
+                    case '4':
+                        trier_tableau_des_velos(&bd_courante, ordre, 
+                            PRIX_PAR_HEURE);
+                        break;
+                    case '5':
+                        trier_tableau_des_velos(&bd_courante, ordre,
+                            DISPONIBLE);
+                        break;
+                    case '6':
+                        trier_tableau_des_velos(&bd_courante, ordre,
+                            LOUE_PAR_CLIENT);
+                        break;
+                
+                }
+                printf("Tri de la table des vélos réussi.\n\n");
             }
                 break;
                 
@@ -629,8 +679,63 @@ int main() {
                 // parametre du tri (id, nom, prenom, telephone, duree_acc, 
                 // montant_acc, velo_loue)
 
-                // trier_tableau_des_clients();
+                printf("\tTri par ordre:\n"
+                    "\t\t1. Croissant\n"
+                    "\t\t2. Décroissant\n");
+                char ordre;
+                do {
+                    ordre = lire_caractere("\t> ");
+                } while (ordre != '1' && ordre != '2');
+                ordre -= '0'; // to convert it back to int values of 1/2
 
+                while ((c = getchar()) != '\n' && c != EOF)
+                    ;  // flush buffer before reading
+
+                printf("Saisir le paramètre de tri parmi les suivants\n");
+                printf("\t1. ID du client\n");
+                printf("\t2. Nom\n");
+                printf("\t3. Prénom\n");
+                printf("\t4. Téléphone\n");
+                printf("\t5. Durée accumulée de location\n");
+                printf("\t6. Montant accumulée de location\n");
+                char choix;
+                do {
+                    choix = lire_caractere("\t> ");
+                } while (choix < '1' ||  choix > '6');
+
+                while ((c = getchar()) != '\n' && c != EOF)
+                    ;  // flush buffer before reading
+
+                switch (choix) {
+                    case '1':
+                        trier_tableau_des_clients(&bd_courante, ordre,
+                            ID_CLIENT);
+                        break;
+                    case '2':
+                        trier_tableau_des_clients(&bd_courante, ordre, NOM);
+                        break;
+                    case '3':
+                        trier_tableau_des_clients(&bd_courante, ordre, PRENOM);
+                        break;
+                    case '4':
+                        trier_tableau_des_clients(&bd_courante, ordre,
+                            TELEPHONE);
+                        break;
+                    case '5':
+                        trier_tableau_des_clients(&bd_courante, ordre,
+                            DUREE_ACC);
+                        break;
+                    case '6':
+                        trier_tableau_des_clients(&bd_courante, ordre,
+                            MONTANT_ACC);
+                        break;
+                    case '7':
+                        trier_tableau_des_clients(&bd_courante, ordre,
+                            VELO_LOUE_ID);
+                        break;
+                
+                }
+                printf("Tri de la table des clients réussi.\n\n");
             }
                 break;
 

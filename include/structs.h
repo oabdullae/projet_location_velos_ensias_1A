@@ -1,6 +1,11 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
+typedef enum {
+    CROISSANT = 1,
+    DECROISSANT
+} PARAM_TRI; // used by both velo and client tables
+
 typedef struct Client {
     int id;
     char *nom, *prenom, *telephone;

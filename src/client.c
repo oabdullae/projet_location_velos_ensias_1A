@@ -268,7 +268,143 @@ Table_Client *rechercher_client_par_parametre(Base_Donnee_Location *bd,
     return results;
 }
 
-
+void trier_tableau_des_clients(Base_Donnee_Location *bd, int ordre,
+    int type_parametre) {
+    switch (type_parametre) {
+        case ID_CLIENT:
+            for (int i = 1; i < bd->clients.size; ++i) {
+                Client temp_client = bd->clients.tab_client[i];
+                int j = i;
+                while (j > 0 && 
+                    (
+                        (ordre == CROISSANT && temp_client.id < 
+                            bd->clients.tab_client[j-1].id)
+                        ||
+                        (ordre == DECROISSANT && temp_client.id > 
+                            bd->clients.tab_client[j-1].id)
+                    )
+                ) {
+                    bd->clients.tab_client[j] = bd->clients.tab_client[j-1];
+                    --j;
+                }
+                bd->clients.tab_client[j] = temp_client;
+            }
+            break;
+        case NOM:
+            for (int i = 1; i < bd->clients.size; ++i) {
+                Client temp_client = bd->clients.tab_client[i];
+                int j = i;
+                while (j > 0 && 
+                    (
+                        (ordre == CROISSANT && strcmp(temp_client.nom, 
+                            bd->clients.tab_client[j-1].nom) < 0)
+                        ||
+                        (ordre == DECROISSANT && strcmp(temp_client.nom, 
+                            bd->clients.tab_client[j-1].nom) > 0)
+                    )
+                ) {
+                    bd->clients.tab_client[j] = bd->clients.tab_client[j-1];
+                    --j;
+                }
+                bd->clients.tab_client[j] = temp_client;
+            }
+            break;
+        case PRENOM:
+            for (int i = 1; i < bd->clients.size; ++i) {
+                Client temp_client = bd->clients.tab_client[i];
+                int j = i;
+                while (j > 0 && 
+                    (
+                        (ordre == CROISSANT && strcmp(temp_client.prenom, 
+                            bd->clients.tab_client[j-1].prenom) < 0)
+                        ||
+                        (ordre == DECROISSANT && strcmp(temp_client.prenom, 
+                            bd->clients.tab_client[j-1].prenom) > 0)
+                    )
+                ) {
+                    bd->clients.tab_client[j] = bd->clients.tab_client[j-1];
+                    --j;
+                }
+                bd->clients.tab_client[j] = temp_client;
+            }
+            break;
+        case TELEPHONE:
+            for (int i = 1; i < bd->clients.size; ++i) {
+                Client temp_client = bd->clients.tab_client[i];
+                int j = i;
+                while (j > 0 && 
+                    (
+                        (ordre == CROISSANT && strcmp(temp_client.telephone, 
+                            bd->clients.tab_client[j-1].telephone) < 0)
+                        ||
+                        (ordre == DECROISSANT && strcmp(temp_client.telephone, 
+                            bd->clients.tab_client[j-1].telephone) > 0)
+                    )
+                ) {
+                    bd->clients.tab_client[j] = bd->clients.tab_client[j-1];
+                    --j;
+                }
+                bd->clients.tab_client[j] = temp_client;
+            }
+            break;
+        case DUREE_ACC:
+            for (int i = 1; i < bd->clients.size; ++i) {
+                Client temp_client = bd->clients.tab_client[i];
+                int j = i;
+                while (j > 0 &&
+                    (
+                        (ordre == CROISSANT && temp_client.duree_accumulee < 
+                            bd->clients.tab_client[j-1].duree_accumulee)
+                        ||
+                        (ordre == DECROISSANT && temp_client.duree_accumulee > 
+                            bd->clients.tab_client[j-1].duree_accumulee)
+                    )
+                ) {
+                    bd->clients.tab_client[j] = bd->clients.tab_client[j-1];
+                    --j;
+                }
+                bd->clients.tab_client[j] = temp_client;
+            }
+            break;
+        case MONTANT_ACC:
+            for (int i = 1; i < bd->clients.size; ++i) {
+                Client temp_client = bd->clients.tab_client[i];
+                int j = i;
+                while (j > 0 &&
+                    (
+                        (ordre == CROISSANT && temp_client.montant_accumule < 
+                            bd->clients.tab_client[j-1].montant_accumule)
+                        ||
+                        (ordre == DECROISSANT && temp_client.montant_accumule > 
+                            bd->clients.tab_client[j-1].montant_accumule)
+                    )
+                ) {
+                    bd->clients.tab_client[j] = bd->clients.tab_client[j-1];
+                    --j;
+                }
+                bd->clients.tab_client[j] = temp_client;
+            }
+            break;
+        case VELO_LOUE_ID:
+            for (int i = 1; i < bd->clients.size; ++i) {
+                Client temp_client = bd->clients.tab_client[i];
+                int j = i;
+                while (j > 0 &&
+                    (
+                        (ordre == CROISSANT && temp_client.velo_loue_id < 
+                        bd->clients.tab_client[j-1].velo_loue_id) || 
+                        (ordre == DECROISSANT && temp_client.velo_loue_id > 
+                        bd->clients.tab_client[j-1].velo_loue_id)
+                    )
+                ) {
+                    bd->clients.tab_client[j] = bd->clients.tab_client[j-1];
+                    --j;
+                }
+                bd->clients.tab_client[j] = temp_client;
+            }
+            break;
+    }
+}
 
 int trouver_client_par_id(Base_Donnee_Location *bd, int id_client) {
     int i;

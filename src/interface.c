@@ -10,7 +10,7 @@ void print_menu() {
     // l'operation, et elle peut meme avoir des menus en cours de l'operation
     printf("\t+----------------------------------------------------------+\n");
     printf("\t| +------------------------------------------------------+ |\n");
-    printf("\t| | >> Saisir x pour afficher ce menu si vous en avez << | |\n"); 
+    printf("\t| | >> Saisir Z pour afficher ce menu si vous en avez << | |\n"); 
     printf("\t| | >>          plus tard dans le programme.          << | |\n");
     printf("\t| +------------------------------------------------------+ |\n");
     printf("\t| A. Gestion des vélos:                                    |\n");
@@ -46,11 +46,11 @@ void print_menu() {
     printf("\t| H. Statistiques                                          |\n");
     printf("\t|  (a implementer plus tard)                               |\n");
     printf("\t| I. Outils                                                |\n");
-    printf("\t|  s. Réafficher le menu principal                         |\n");
-               // sauvegarde automatique ou non
-    printf("\t|  t. Parametres                                           |\n");
+        // sauvegarde automatique ou non
+    printf("\t|  x. Parametres                                           |\n");
+    printf("\t|  y. Réafficher le menu principal                         |\n");
         // sauvegarde automatique ou prompt selon le parametrage avant quitter
-    printf("\t|  u. Quitter le Programme                                 |\n");
+    printf("\t|  z. Quitter le Programme                                 |\n");
     printf("\t+----------------------------------------------------------+\n");
 }
 
