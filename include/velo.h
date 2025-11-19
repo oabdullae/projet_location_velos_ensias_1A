@@ -41,5 +41,7 @@ Table_Velo *recherche_dichotomique_velo_par_parametre(Base_Donnee_Location *bd,
     int type_parametre, void *parametre);
 int dedupliquer_velo_par_parametre(Base_Donnee_Location *bd,
     int type_parametre, void *parametre);
+int stat_nbr_velos_total(Base_Donnee_Location *bd);
+double pourcentage_velos_loues(Base_Donnee_Location *bd);
 
 #endif

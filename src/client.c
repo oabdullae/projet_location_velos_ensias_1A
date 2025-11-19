@@ -76,6 +76,10 @@ int supprimer_client_par_id(Base_Donnee_Location *bd, int id) {
         return ERR_CLIENT_LOUE_DEJA_1VELO; // client can't be deleted, they 
                                            // should return the bike first
 
+    free(bd->clients.tab_client[i].nom);
+    free(bd->clients.tab_client[i].prenom);
+    free(bd->clients.tab_client[i].telephone);
+    
     // shifts back by one client if necessary
     for (int j = i; j < bd->clients.size - 1; ++j) {//this loop won't execute if i 
         bd->clients.tab_client[j] = bd->clients.tab_client[j+1]; // was last i.e. size-1
@@ -178,7 +182,7 @@ void afficher_table_des_clients(Table_Client *clients_array) {
         printf("+----+-------------+-------------+-------------+--------+------"
             "----+-----------+\n");
     }
-
+    printf("\n------\n\n");
 }
 
 Table_Client *rechercher_client_par_parametre(Base_Donnee_Location *bd,
@@ -696,6 +700,19 @@ int dedupliquer_client_par_parametre(Base_Donnee_Location *bd,
     }
     return 0;
 }
+
+int stat_nbr_clients_total(Base_Donnee_Location *bd) {
+    return bd->clients.size;
+}
+
+double revenu_total_genere(Base_Donnee_Location *bd) {
+    double total = 0.0;
+    for (int i = 0; i < bd->clients.size; ++i) {
+        total += bd->clients.tab_client[i].montant_accumule;
+    }
+    return total;
+}
+
 
 int trouver_client_par_id(Base_Donnee_Location *bd, int id_client) {
     int i;

@@ -43,5 +43,7 @@ Table_Client *recherche_dichotomique_client_par_parametre(Base_Donnee_Location *
     int type_parametre, void *parametre);
 int dedupliquer_client_par_parametre(Base_Donnee_Location *bd,
     int type_parametre, void *parametre);
+int stat_nbr_clients_total(Base_Donnee_Location *bd);
+double revenu_total_genere(Base_Donnee_Location *bd);
 
 #endif

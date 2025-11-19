@@ -42,6 +42,9 @@ int supprimer_velo_par_id(Base_Donnee_Location *bd, int id) {
         return ERR_VELO_DEJA_LOUE; // velo can't be deleted, it should be
                                            // returned first
 
+    free(bd->velos.tab_velo[i].marque);
+    free(bd->velos.tab_velo[i].type);
+    
     // shifts back by one velo if necessary
     for (int j = i; j < bd->velos.size - 1; ++j) {//this loop won't execute if i 
         bd->velos.tab_velo[j] = bd->velos.tab_velo[j+1]; // was last i.e. size-1
@@ -149,7 +152,7 @@ void afficher_table_des_velos(Table_Velo *velos_array) {
         printf("+----+--------------------+--------------------+------------+--"
             "--------+-------+\n");
     }
-
+    printf("\n------\n\n");
 }
 
 // returns a struct that contains a dynamically allocated Velo array that stores
@@ -724,6 +727,22 @@ void afficher_velo_par_id(Base_Donnee_Location *bd, int id) {
     }
 }
 
+int stat_nbr_velos_total(Base_Donnee_Location *bd) {
+    return bd->velos.size;
+}
+
+double pourcentage_velos_loues(Base_Donnee_Location *bd) {
+    if (bd->velos.size == 0)
+        return 0.0;
+    int loues = 0;
+    for (int i = 0; i < bd->velos.size; ++i){
+        if (!bd->velos.tab_velo[i].disponible) {
+            ++loues;
+        }
+    }
+    return (100.0 * loues) / bd->velos.size;
+}
+
 int trouver_velo_par_id(Base_Donnee_Location *bd, int id) {
     int i;
     for (i = 0; i < bd->velos.size; ++i) {
@@ -744,3 +763,26 @@ int doubler_taille_tab_velo(Base_Donnee_Location *bd) {
     bd->velos.tab_velo = tmp_velo;
     return 0;
 }
+
+// very first version of table display kept as history:
+                // if (bd_courante.clients.size != 0)
+                //     printf("Affichage de la table des clients\n");
+                // else
+                //     printf("Le tableau des clients est vide\n");
+
+                // for (int i = 0; i < bd_courante.clients.size; ++i) {
+                //     printf("\n------\n\n");
+                //     printf("\tid = %d\n", bd_courante.clients.tab_client[i].id);
+                //     printf("\tnom = %s\n",
+                //         bd_courante.clients.tab_client[i].nom);
+                //     printf("\tprenom = %s\n",
+                //         bd_courante.clients.tab_client[i].prenom);
+                //     printf("\ttelephone = %s\n",
+                //         bd_courante.clients.tab_client[i].telephone);
+                //     printf("\tduree accumulee de tous les locations = %.2lf\n",
+                //         bd_courante.clients.tab_client[i].duree_accumulee);
+                //     if (bd_courante.clients.tab_client[i].velo_loue_id != 0)
+                //         printf("\tid du vélo loué = %d\n",
+                //             bd_courante.clients.tab_client[i].velo_loue_id);
+                // }
+                // printf("\n\n");

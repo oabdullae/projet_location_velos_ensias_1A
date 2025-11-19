@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <malloc.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "structs.h"
@@ -21,7 +22,6 @@ int main() {
     int rester = 1;
     Base_Donnee_Location bd_courante;
     init_base_donnee(&bd_courante);
-    // import_base_donnee(); // later
     int c;
     do {
         operation = lire_caractere("Veuillez saisir la lettre correspondante "
@@ -51,10 +51,11 @@ int main() {
                 } while (prix_par_heure <= 0);
                 if (ajouter_nouveau_velo(&bd_courante, marque, type, 
                     prix_par_heure) != 0) {
-                    printf("\n### ERREUR: Echéc d'ajout d'un nouveau vélo\n\n");
+                    printf("\n### ERREUR: Echéc d'ajout d'un nouveau vélo\n\n"
+                        "------\n\n");
                 }
                 else {
-                    printf("Ajout d'un nouveau vélo réussi.\n\n");
+                    printf("Ajout d'un nouveau vélo réussi.\n\n------\n\n");
                 }
             }
                 break;
@@ -76,14 +77,15 @@ int main() {
                 switch (supprimer_velo_par_id(&bd_courante, id)) {
                     case ERR_VELO_NOT_FOUND:
                         printf("\n### ERREUR: Echéc de suppression du vélo, "
-                            "vélo introuvable\n\n");
+                            "vélo introuvable\n\n------\n\n");
                         break;
                     case ERR_VELO_DEJA_LOUE:
                         printf("\n### ERREUR: Echéc de suppression du vélo, "
-                            "vélo déjà loué, il doit être retourné d'abord\n\n");
+                            "vélo déjà loué, il doit être retourné d'abord\n\n"
+                            "------\n\n");
                         break;
                     case 0:
-                        printf("Suppression réussie.\n\n");
+                        printf("Suppression réussie.\n\n------\n\n");
                         break;
                     default:
                         printf("#### erreur du programmeur ####\n");
@@ -106,15 +108,15 @@ int main() {
                 double nouveau_prix_par_heure = 0;
                 do {
                     nouveau_prix_par_heure = lire_reel("\tSaisir le nouveau "
-                                                       "prix par heure: ");
+                                                        "prix par heure: ");
                 } while (nouveau_prix_par_heure <= 0);
                 if (modifier_tarif_velo(&bd_courante, id, 
                                         nouveau_prix_par_heure) != 0) {
                     printf("\n### ERREUR: Echéc de modification du tarif du "
-                        "vélo, vélo introuvable\n\n");
+                        "vélo, vélo introuvable\n\n------\n\n");
                 }
                 else {
-                    printf("Modification du tarif réussie.\n\n");
+                    printf("Modification du tarif réussie.\n\n------\n\n");
                 }
             }
                 break;
@@ -161,7 +163,7 @@ int main() {
                                 "ce client loue déjà un vélo\n\n");
                             break;
                         case 0:
-                            printf("Location du vélo réussie.\n\n");
+                            printf("Location du vélo réussie.\n\n------\n\n");
                             break;
                         default:
                             printf("#### erreur du programmeur ####\n");
@@ -201,7 +203,7 @@ int main() {
                     case 0:
                         printf("Votre montant à payer est %g\n", 
                             montant);
-                        printf("Retour du vélo réussie.\n\n");
+                        printf("Retour du vélo réussie.\n\n------\n\n");
                         break;
                     default:
                             printf("#### erreur du programmeur ####\n");
@@ -235,10 +237,10 @@ int main() {
                 if (ajouter_nouveau_client(&bd_courante, nom, prenom, telephone)
                     != 0){
                     printf("\n### ERREUR: Echéc d'ajout d'un nouveau "
-                        "client\n\n");
+                        "client\n\n------\n\n");
                 }
                 else {
-                    printf("Ajout d'un nouveau client réussi.\n\n");
+                    printf("Ajout d'un nouveau client réussi.\n\n------\n\n");
                 }
             }
                 break;
@@ -260,15 +262,15 @@ int main() {
                 switch (supprimer_client_par_id(&bd_courante, id)) {
                     case ERR_CLIENT_NOT_FOUND:
                         printf("\n### ERREUR: Echéc de suppression du client, "
-                            "client introuvable\n\n");
+                            "client introuvable\n\n------\n\n");
                         break;
                     case ERR_CLIENT_LOUE_DEJA_1VELO:
                         printf("\n### ERREUR: Echéc de suppression du client, "
                             "client déjà loue un vélo, il doit le retourner d'abord"
-                            "\n\n");
+                            "\n\n------\n\n");
                         break;
                     case 0:
-                        printf("Suppression réussie.\n\n");
+                        printf("Suppression réussie.\n\n------\n\n");
                         break;
                     default:
                         printf("#### erreur du programmeur ####\n");
@@ -321,10 +323,10 @@ int main() {
                     str)) {
                     case ERR_CLIENT_NOT_FOUND:
                         printf("\n### ERREUR: Echéc de modification du client, "
-                            "client introuvable\n\n");
+                            "client introuvable\n\n------\n\n");
                         break;
                     case 0:
-                        printf("Modification réussie.\n\n");
+                        printf("Modification réussie.\n\n------\n\n");
                         break;
                     default:
                         printf("#### erreur du programmeur ####\n");
@@ -466,6 +468,10 @@ int main() {
                 }
 
                 // free the result pointer that we used to get search output
+                for (int i = 0; i < results->size; ++i) {
+                    free(results->tab_velo[i].marque);
+                    free(results->tab_velo[i].type);
+                }
                 free(results);
             }
                 break;
@@ -491,7 +497,7 @@ int main() {
                 printf("\t4. Prix par heure\n");
                 printf("\t5. Disponibilité\n");
                 printf("\t6. Locataire (ID)\n");
-               
+                
                 do {
                     choix = lire_caractere("\t> ");
                 } while (choix < '1' ||  choix > '6');
@@ -585,6 +591,10 @@ int main() {
                 }
 
                 // free the result pointer that we used to get search output
+                for (int i = 0; i < results->size; ++i) {
+                    free(results->tab_velo[i].marque);
+                    free(results->tab_velo[i].type);
+                }
                 free(results);
 
             }
@@ -688,6 +698,11 @@ int main() {
                 }
 
                 // free the result pointer that we used to get search output
+                for (int i = 0; i < results->size; ++i) {
+                    free(results->tab_client[i].nom);
+                    free(results->tab_client[i].prenom);
+                    free(results->tab_client[i].telephone);
+                }
                 free(results);
             }
                 break;
@@ -712,7 +727,7 @@ int main() {
                 printf("\t3. Prénom\n");
                 printf("\t4. Téléphone\n");
                 printf("\t5. Vélo loué (ID)\n");
-               
+                
                 do {
                     choix = lire_caractere("\t> ");
                 } while (choix < '1' ||  choix > '5');
@@ -792,6 +807,11 @@ int main() {
                 }
 
                 // free the result pointer that we used to get search output
+                for (int i = 0; i < results->size; ++i) {
+                    free(results->tab_client[i].nom);
+                    free(results->tab_client[i].prenom);
+                    free(results->tab_client[i].telephone);
+                }
                 free(results);
 
             }
@@ -858,7 +878,7 @@ int main() {
                         break;
                 
                 }
-                printf("Tri de la table des vélos réussi.\n\n");
+                printf("Tri de la table des vélos réussi.\n\n------\n\n");
             }
                 break;
                 
@@ -930,7 +950,7 @@ int main() {
                         break;
                 
                 }
-                printf("Tri de la table des clients réussi.\n\n");
+                printf("Tri de la table des clients réussi.\n\n------\n\n");
             }
                 break;
 
@@ -971,10 +991,11 @@ int main() {
                             case ERR_VELO_DEJA_LOUE:
                                 printf("\n### ALERTE: Quelques vélos ne sont "
                                     "pas supprimés car ils sont déjà loués, "
-                                    "ils doivent être retournés d'abord\n\n");
+                                    "ils doivent être retournés d'abord\n\n"
+                                    "------\n\n");
                                 break;
                             case 0:
-                                printf("Déduplication réussie.\n\n");
+                                printf("Déduplication réussie.\n\n------\n\n");
                                     
                         }
 
@@ -990,15 +1011,16 @@ int main() {
                             TYPE, temp_type)) {
                             case ERR_VELO_NOT_FOUND:
                                 printf("\n### ERREUR: Echéc de déduplication "
-                                    "du vélo, vélo introuvable\n\n");
+                                    "du vélo, vélo introuvable\n\n------\n\n");
                                 break;
                             case ERR_VELO_DEJA_LOUE:
                                 printf("\n### ALERTE: Quelques vélos ne sont "
                                     "pas supprimés car ils sont déjà loués, \n"
-                                    "ils doivent être retournés d'abord\n\n");
+                                    "ils doivent être retournés d'abord\n\n"
+                                    "------\n\n");
                                 break;
                             case 0:
-                                printf("Déduplication réussie.\n\n");
+                                printf("Déduplication réussie.\n\n------\n\n");
                                     
                         }
 
@@ -1019,8 +1041,8 @@ int main() {
                 char choix;
                 printf("Déduplication des clients\n");
                 printf("Saisir le paramètre de déduplication parmi les "
-                    "suivants \n(/!\\attention la déduplication ne garde que la "
-                    "première occcurence)\n");
+                    "suivants \n(/!\\attention la déduplication ne garde que "
+                    "la première occcurence)\n");
                 printf("\t1. Nom\n");
                 printf("\t2. Prénom\n");
 
@@ -1042,15 +1064,17 @@ int main() {
                             NOM, temp_nom)) {
                             case ERR_CLIENT_NOT_FOUND:
                                 printf("\n### ERREUR: Echéc de déduplication "
-                                    "du client, client introuvable\n\n");
+                                    "du client, client introuvable\n\n------"
+                                    "\n\n");
                                 break;
                             case ERR_CLIENT_LOUE_DEJA_1VELO:
                                 printf("\n### ALERTE: Quelques clients ne sont "
                                     "pas supprimés car ils louent des vélos, \n"
-                                    "ils doivent les retourner d'abord\n\n");
+                                    "ils doivent les retourner d'abord\n\n"
+                                    "------\n\n");
                                 break;
                             case 0:
-                                printf("Déduplication réussie.\n\n");
+                                printf("Déduplication réussie.\n\n------\n\n");
                                     
                         }
 
@@ -1066,15 +1090,17 @@ int main() {
                             PRENOM, temp_prenom)) {
                             case ERR_CLIENT_NOT_FOUND:
                                 printf("\n### ERREUR: Echéc de déduplication "
-                                    "du client, client introuvable\n\n");
+                                    "du client, client introuvable\n\n------\n"
+                                    "\n");
                                 break;
                             case ERR_CLIENT_LOUE_DEJA_1VELO:
                                 printf("\n### ALERTE: Quelques clients ne sont "
                                     "pas supprimés car ils louent des vélos, \n"
-                                    "ils doivent les retourner d'abord\n\n");
+                                    "ils doivent les retourner d'abord\n\n"
+                                    "------\n\n");
                                 break;
                             case 0:
-                                printf("Déduplication réussie.\n\n");
+                                printf("Déduplication réussie.\n\n------\n\n");
                                     
                         }
 
@@ -1089,12 +1115,11 @@ int main() {
 
             case 's': case 'S':
             {
-                // void export_bd(Base_Donnee_Location *bd);
 
                 while ((c = getchar()) != '\n' && c != EOF)
                     ;  // flush buffer before reading
 
-                printf("Export\n"
+                printf("Exportation\n"
                     "(attention si vous avez une autre base de donnee "
                     "sauvegardée sous le nom \nsaved_bd.loc elle sera écrasé)"
                     "\n\t1. Continuer\n\t2. Annuler\n");
@@ -1104,14 +1129,15 @@ int main() {
                 } while (choix < '1' || choix > '2');
                 if (choix == '1') {
                     if (export_bd(&bd_courante) != 0) {
-                        printf("### échec d'ouverture du fichier saved_bd.loc\n\n");
+                        printf("### échec d'ouverture du fichier saved_bd.loc"
+                            "\n\n------\n\n");
                     } 
                     else {
-                        printf("Sauvegarde réussie\n\n");
+                        printf("Sauvegarde réussie\n\n------\n\n");
                     }
                 }
                 else {
-                    printf("Export Annulé\n\n");
+                    printf("Exportation Annulé\n\n------\n\n");
                 }
             }
                 break;
@@ -1120,17 +1146,44 @@ int main() {
 
             case 't': case 'T':
             {
-                // void import_bd(Base_Donnee_Location *bd);
                 
                 while ((c = getchar()) != '\n' && c != EOF)
                     ;  // flush buffer before reading
 
-                printf("Import\n");
-                if (import_bd(&bd_courante) != 0) {
-                    printf("### échec d'ouverture du fichier saved_bd.loc\n\n");
+                printf("Importation\nAttention: si une base de données est "
+                    "actuellement chargée et que vous ne\nl'avez pas exportée, "
+                    "elle sera perdue lors de l'importation. Pensez à "
+                    "l'exporter\navant de continuer.\nLe fichier utilisé pour "
+                    "l'import doit être nommé \"saved_bd.loc\" sous ce "
+                    "répertoire"
+                    "\n\t1. Continuer"
+                    "\n\t2. Annuler\n");
+                char choix;
+                do {
+                    choix = lire_caractere("\t> ");
+                } while (choix < '1' || choix > '2');
+                if (choix == '1') {
+                    // free old base de donnee
+                    for (int i = 0; i < bd_courante.velos.size; ++i) {
+                        free(bd_courante.velos.tab_velo[i].marque);
+                        free(bd_courante.velos.tab_velo[i].type);
+                    }
+                    for (int i = 0; i < bd_courante.clients.size; ++i) {
+                        free(bd_courante.clients.tab_client[i].nom);
+                        free(bd_courante.clients.tab_client[i].prenom);
+                        free(bd_courante.clients.tab_client[i].telephone);
+                    }
+                    free(bd_courante.velos.tab_velo);
+                    free(bd_courante.clients.tab_client);
+                    if (import_bd(&bd_courante) != 0) {
+                        printf("### échec d'ouverture du fichier saved_bd.loc\n\n");
+                    }
+                    else
+                        printf("Chargement réussi\n\n------\n\n");
                 }
-                else
-                    printf("Chargement réussi\n\n");
+                else {
+                    printf("Importation annulée\n\n------\n\n");
+                }
             }
                 break;
             
@@ -1138,56 +1191,85 @@ int main() {
 
             case 'u': case 'U':
             {
-                
+                while ((c = getchar()) != '\n' && c != EOF)
+                    ;  // flush buffer before reading
+
+                printf("Nombre total des vélos et clients\n");
+                printf("\tTotal vélos: %d\n", 
+                    stat_nbr_velos_total(&bd_courante));
+                printf("\tTotal clients: %d\n", 
+                    stat_nbr_clients_total(&bd_courante));
+                printf("Statistiques affichées\n\n------\n\n");
             }
+                break;
 
             // =================================================================
 
             case 'v': case 'V':
+            {
+                while ((c = getchar()) != '\n' && c != EOF)
+                    ;  // flush buffer before reading
 
+                printf("Revenu total généré\n");
+                printf("\tRevenu total généré: %g\n", 
+                    revenu_total_genere(&bd_courante));
+                printf("Statistique affichée\n\n------\n\n");
+            }
+                break;
 
             // =================================================================
 
             case 'w': case 'W':
-
-
-
-            // =================================================================
-
-            case 'x': case 'X':
+            {
                 while ((c = getchar()) != '\n' && c != EOF)
                     ;  // flush buffer before reading
-                // TODO: move this out of here
-                // TODO: make this a separate function
-                if (bd_courante.clients.size != 0)
-                    printf("Affichage de la table des clients\n");
-                else
-                    printf("Le tableau des clients est vide\n");
 
-                for (int i = 0; i < bd_courante.clients.size; ++i) {
-                    printf("\n------\n\n");
-                    printf("\tid = %d\n", bd_courante.clients.tab_client[i].id);
-                    printf("\tnom = %s\n",
-                        bd_courante.clients.tab_client[i].nom);
-                    printf("\tprenom = %s\n",
-                        bd_courante.clients.tab_client[i].prenom);
-                    printf("\ttelephone = %s\n",
-                        bd_courante.clients.tab_client[i].telephone);
-                    printf("\tduree accumulee de tous les locations = %.2lf\n",
-                        bd_courante.clients.tab_client[i].duree_accumulee);
-                    if (bd_courante.clients.tab_client[i].velo_loue_id != 0)
-                        printf("\tid du vélo loué = %d\n",
-                            bd_courante.clients.tab_client[i].velo_loue_id);
-                }
-                printf("\n\n");
+                printf("Pourcentage des vélos loués\n");
+                printf("\tRevenu total généré: %.2lf\n", 
+                    pourcentage_velos_loues(&bd_courante));
+                printf("Statistique affichée\n\n------\n\n");
+            }
                 break;
 
             // =================================================================
 
             case 'y': case 'Y':
-                printf("--- Au revoir ---\n\n");
-                rester = 0;
+            {
+                while ((c = getchar()) != '\n' && c != EOF)
+                    ;  // flush buffer before reading
+
+                // warning about unsaved work
+                printf("Vous êtes sur le point de quitter le programme. Si vous "
+                    "n'avez pas exporté votre\nbase de données ou vos "
+                    "modifications, elles seront perdues.\n"
+                    "\t1. Continuer et quitter le programme\n"
+                    "\t2. Annuler et revenir à l'interface principale\n");
+                char choix;
+                do {
+                    choix = lire_caractere("\t> ");
+                } while (choix < '1' || choix > '2');
+                if (choix == '1') {
+                    // deallocate allocated space
+                        for (int i = 0; i < bd_courante.velos.size; ++i) {
+                        free(bd_courante.velos.tab_velo[i].marque);
+                        free(bd_courante.velos.tab_velo[i].type);
+                    }
+                    for (int i = 0; i < bd_courante.clients.size; ++i) {
+                        free(bd_courante.clients.tab_client[i].nom);
+                        free(bd_courante.clients.tab_client[i].prenom);
+                        free(bd_courante.clients.tab_client[i].telephone);
+                    }
+                    free(bd_courante.velos.tab_velo);
+                    free(bd_courante.clients.tab_client);
+
+                    printf("--- Au revoir ---\n\n");
+                    rester = 0;
+                }
+                else {
+                    printf("Sortie du programme annulée\n\n------\n\n");
+                }
                 break;
+            }
 
 
             // =================================================================
@@ -1196,7 +1278,7 @@ int main() {
                 while ((c = getchar()) != '\n' && c != EOF)
                     ;  // flush buffer before reading
                 print_menu();
-                
+                break;
         }
     } while (rester);
     return 0;
